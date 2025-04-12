@@ -24,7 +24,7 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Yardım butonu eklendi */}
+            {/* Yardım butonu eklendi.. */}
             <HelpButton />
 
             {/* Footer alanı */}
