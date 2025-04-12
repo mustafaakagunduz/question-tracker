@@ -42,36 +42,8 @@ const getDifficultyColor = (difficulty: DifficultyLevel): string => {
     }
 };
 
-// Örnek veri
-const initialQuestions: Question[] = [
-    {
-        id: 1,
-        title: 'İki Sayının Toplamı',
-        site: 'LeetCode',
-        link: 'https://leetcode.com/problems/two-sum/',
-        solvedDate: new Date(2025, 3, 10), // 10 Nisan 2025
-        difficulty: 'Kolay',
-        reviewDate: new Date(2025, 3, 14), // 4 gün sonra
-    },
-    {
-        id: 2,
-        title: 'Geçerli Parantezler',
-        site: 'HackerRank',
-        link: 'https://www.hackerrank.com/challenges/balanced-brackets/',
-        solvedDate: new Date(2025, 3, 8), // 8 Nisan 2025
-        difficulty: 'Orta',
-        reviewDate: new Date(2025, 3, 11), // 3 gün sonra
-    },
-    {
-        id: 3,
-        title: 'En Uzun Artarak Devam Eden Alt Dizi',
-        site: 'CodeForces',
-        link: 'https://codeforces.com/problemset/problem/300/A',
-        solvedDate: new Date(2025, 3, 5), // 5 Nisan 2025
-        difficulty: 'Çok Zor',
-        reviewDate: new Date(2025, 3, 6), // 1 gün sonra
-    },
-];
+// Boş başlangıç verisi
+const initialQuestions: Question[] = [];
 
 // LocalStorage yardımcı fonksiyonları
 const STORAGE_KEY = 'algorithm-questions';
@@ -79,14 +51,14 @@ const STORAGE_KEY = 'algorithm-questions';
 // Soruları localStorage'dan yükleme
 const loadQuestionsFromStorage = (): Question[] => {
     if (typeof window === 'undefined') {
-        return initialQuestions; // Server-side rendering sırasında
+        return []; // Server-side rendering sırasında boş dizi dön
     }
 
     try {
         const savedQuestionsString = localStorage.getItem(STORAGE_KEY);
 
         if (!savedQuestionsString) {
-            return initialQuestions;
+            return []; // Veri yoksa boş dizi dön
         }
 
         const savedQuestions = JSON.parse(savedQuestionsString);
@@ -99,7 +71,7 @@ const loadQuestionsFromStorage = (): Question[] => {
         }));
     } catch (error) {
         console.error('Sorular yüklenirken hata oluştu:', error);
-        return initialQuestions;
+        return []; // Hata durumunda boş dizi dön
     }
 };
 
@@ -129,9 +101,7 @@ export const QuestionTable: React.FC = () => {
 
     // Sorular değiştiğinde localStorage'a kaydetme
     useEffect(() => {
-        if (questions.length > 0) {
-            saveQuestionsToStorage(questions);
-        }
+        saveQuestionsToStorage(questions);
     }, [questions]);
 
     // Tarih formatlama fonksiyonu
