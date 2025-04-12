@@ -194,10 +194,10 @@ export const QuestionTable: React.FC = () => {
                     <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">Çözülmüş Olan Algoritma Soruları</h2>
                     <Button
                         onClick={handleAddQuestion}
-                        className="bg-gradient-to-br from-indigo-600 to-purple-700 hover:from-indigo-500 hover:to-purple-600 text-white rounded-full h-12 w-12 p-0 shadow-lg shadow-indigo-900/30 hover:shadow-indigo-700/40 border border-indigo-400/20 transform-none"
-                        style={{ transform: 'none', transition: 'background 0.2s, box-shadow 0.2s, filter 0.2s' }}
+                        className="flex items-center gap-2 bg-indigo-800/70 hover:bg-indigo-700 text-indigo-200 hover:text-white rounded-lg px-4 py-2 shadow-md hover:shadow-lg border border-indigo-400/20 transition-all duration-200"
                     >
-                        <PlusCircle className="h-8 w-8" />
+                        <PlusCircle className="h-5 w-5 opacity-80" />
+                        <span>Yeni Soru Ekle</span>
                     </Button>
                 </div>
 
@@ -220,7 +220,7 @@ export const QuestionTable: React.FC = () => {
                                     <TableCell colSpan={7} className="text-center py-12 text-indigo-200/70">
                                         <div className="flex flex-col items-center gap-3">
                                             <PlusCircle className="h-10 w-10 opacity-50" />
-                                            <span className="text-lg">Henüz soru eklenmemiş. Yeni bir soru eklemek için sağ üstteki + butonuna tıklayın.</span>
+                                            <span className="text-lg">Henüz soru eklenmemiş. Yeni bir soru eklemek için sağ üstteki butonuna tıklayın.</span>
                                         </div>
                                     </TableCell>
                                 </TableRow>

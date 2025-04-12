@@ -130,9 +130,9 @@ export const TodayReviewQuestions: React.FC = () => {
                 <Table>
                     <TableHeader className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80">
                         <TableRow className="border-b-0">
-                            <TableHead className="text-white font-semibold tracking-wide w-1/2">SORU</TableHead>
-                            <TableHead className="text-white font-semibold tracking-wide w-1/4">BAĞLANTI LİNKİ</TableHead>
-                            <TableHead className="text-white font-semibold tracking-wide w-1/4 text-center">TEKRAR DURUMU</TableHead>
+                            <TableHead className="text-white font-semibold tracking-wide w-1/3">SORU</TableHead>
+                            <TableHead className="text-white font-semibold tracking-wide w-1/3">BAĞLANTI LİNKİ</TableHead>
+                            <TableHead className="text-white font-semibold tracking-wide w-1/3 text-center">TEKRAR DURUMU</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -155,8 +155,8 @@ export const TodayReviewQuestions: React.FC = () => {
                                             : 'hover:bg-white/10'
                                     }`}
                                 >
-                                    <TableCell className="font-medium text-white w-1/2">{question.title}</TableCell>
-                                    <TableCell className="w-1/4">
+                                    <TableCell className="font-medium text-white w-1/3">{question.title}</TableCell>
+                                    <TableCell className="w-1/3">
                                         <a
                                             href={question.link}
                                             target="_blank"
@@ -167,7 +167,7 @@ export const TodayReviewQuestions: React.FC = () => {
                                             <ExternalLink className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                                         </a>
                                     </TableCell>
-                                    <TableCell className="w-1/4 text-center">
+                                    <TableCell className="w-1/3 text-center">
                                         <div className="flex items-center justify-center">
                                             <button
                                                 onClick={() => handleReviewStatusChange(question.id, !reviewStatus[question.id])}
