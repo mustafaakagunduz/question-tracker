@@ -15,7 +15,7 @@ export default function Home() {
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="md:w-1/3 flex">
                             <DateDisplay />
-                            <DateDisplay />
+
                         </div>
                         <div className="md:w-2/3 flex">
                             <TodayReviewQuestions />
