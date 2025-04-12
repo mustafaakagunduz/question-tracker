@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, ExternalLink, Edit, Trash2 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, compareAsc } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import AddQuestionDialog from './AddQuestionDialog';
 import EditQuestionDialog from './EditQuestionDialog';
@@ -86,6 +86,19 @@ const saveQuestionsToStorage = (questions: Question[]) => {
     }
 };
 
+// Soruları "Tekrar Edilecek Tarih"e göre sıralama
+const sortQuestionsByReviewDate = (questions: Question[]): Question[] => {
+    return [...questions].sort((a, b) => {
+        // Null tarihler en sona yerleştirilir
+        if (a.reviewDate === null && b.reviewDate === null) return 0;
+        if (a.reviewDate === null) return 1;
+        if (b.reviewDate === null) return -1;
+
+        // Tarihler var ise, tarihe göre sıralama (en yakın tarih önce)
+        return compareAsc(a.reviewDate, b.reviewDate);
+    });
+};
+
 export const QuestionTable: React.FC = () => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -96,7 +109,7 @@ export const QuestionTable: React.FC = () => {
     // Sayfa yüklendiğinde localStorage'dan veri yükleme
     useEffect(() => {
         const savedQuestions = loadQuestionsFromStorage();
-        setQuestions(savedQuestions);
+        setQuestions(sortQuestionsByReviewDate(savedQuestions));
     }, []);
 
     // Sorular değiştiğinde localStorage'a kaydetme
@@ -129,7 +142,7 @@ export const QuestionTable: React.FC = () => {
 
     // Yeni soru eklendiğinde
     const handleQuestionAdd = (newQuestion: Question) => {
-        const updatedQuestions = [newQuestion, ...questions];
+        const updatedQuestions = sortQuestionsByReviewDate([newQuestion, ...questions]);
         setQuestions(updatedQuestions);
     };
 
@@ -138,7 +151,7 @@ export const QuestionTable: React.FC = () => {
         const updatedQuestions = questions.map(q =>
             q.id === editedQuestion.id ? editedQuestion : q
         );
-        setQuestions(updatedQuestions);
+        setQuestions(sortQuestionsByReviewDate(updatedQuestions));
     };
 
     // Soru silindiğinde
@@ -184,7 +197,7 @@ export const QuestionTable: React.FC = () => {
                         className="bg-gradient-to-br from-indigo-600 to-purple-700 hover:from-indigo-500 hover:to-purple-600 text-white rounded-full h-12 w-12 p-0 shadow-lg shadow-indigo-900/30 hover:shadow-indigo-700/40 border border-indigo-400/20 transform-none"
                         style={{ transform: 'none', transition: 'background 0.2s, box-shadow 0.2s, filter 0.2s' }}
                     >
-                        <PlusCircle className="h-6 w-6" />
+                        <PlusCircle className="h-8 w-8" />
                     </Button>
                 </div>
 
