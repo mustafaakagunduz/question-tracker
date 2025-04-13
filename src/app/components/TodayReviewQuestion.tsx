@@ -3,31 +3,15 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ExternalLink, CheckCircle, Clock } from 'lucide-react';
 import { isToday } from 'date-fns';
-
-// Zorluk seviyesi türleri
-type DifficultyLevel = 'Çok Kolay' | 'Kolay' | 'Orta' | 'Zor' | 'Çok Zor';
-
-// Soru verisi için tip tanımı
-interface Question {
-    id: number;
-    title: string;
-    site: string;
-    link: string;
-    solvedDate: Date | null;
-    difficulty: DifficultyLevel;
-    reviewDate: Date | null;
-}
-
-// Review durumu için interface
-interface ReviewStatus {
-    [key: number]: boolean; // soru id'si -> review durumu
-}
+import { useLanguage } from '../contexts/LanguageContext';
+import { Question, ReviewStatus } from '../types';
 
 // LocalStorage anahtarları
 const QUESTIONS_STORAGE_KEY = 'algorithm-questions';
 const REVIEW_STATUS_STORAGE_KEY = 'today-review-status';
 
 export const TodayReviewQuestions: React.FC = () => {
+    const { t, language } = useLanguage();
     const [todayQuestions, setTodayQuestions] = useState<Question[]>([]);
     const [reviewStatus, setReviewStatus] = useState<ReviewStatus>({});
 
@@ -35,7 +19,7 @@ export const TodayReviewQuestions: React.FC = () => {
     useEffect(() => {
         loadTodayQuestions();
         loadReviewStatus();
-    }, []);
+    }, [language]);
 
     // Review durumunu localStorage'dan yükle
     const loadReviewStatus = (): void => {
@@ -112,16 +96,16 @@ export const TodayReviewQuestions: React.FC = () => {
     return (
         <div className="w-full h-full rounded-xl overflow-hidden border border-indigo-300/20 shadow-2xl bg-gradient-to-br from-indigo-950/80 to-purple-900/70 backdrop-blur-md">
             <div className="flex items-center justify-between p-6 border-b border-indigo-300/20">
-                <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">Bugün Tekrar Edilecek Sorular</h2>
+                <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">{t('todayReviewQuestions.title')}</h2>
                 {allReviewed && todayQuestions.length > 0 ? (
                     <div className="flex items-center bg-gradient-to-r from-emerald-800/30 to-green-800/30 text-green-300 px-4 py-2 rounded-full border border-green-500/20 shadow-inner shadow-green-900/20">
                         <CheckCircle className="h-5 w-5 mr-2" />
-                        <span className="text-sm font-medium">Tüm tekrarlar tamamlandı</span>
+                        <span className="text-sm font-medium">{t('todayReviewQuestions.allCompleted')}</span>
                     </div>
                 ) : todayQuestions.length > 0 ? (
                     <div className="flex items-center bg-gradient-to-r from-amber-800/30 to-orange-800/30 text-amber-300 px-4 py-2 rounded-full border border-amber-500/20 shadow-inner shadow-amber-900/20">
                         <Clock className="h-5 w-5 mr-2" />
-                        <span className="text-sm font-medium">{completedCount} / {todayQuestions.length} tamamlandı</span>
+                        <span className="text-sm font-medium">{completedCount} / {todayQuestions.length} {t('todayReviewQuestions.completed')}</span>
                     </div>
                 ) : null}
             </div>
@@ -130,9 +114,9 @@ export const TodayReviewQuestions: React.FC = () => {
                 <Table>
                     <TableHeader className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80">
                         <TableRow className="border-b-0">
-                            <TableHead className="text-white font-semibold tracking-wide w-1/3">SORU</TableHead>
-                            <TableHead className="text-white font-semibold tracking-wide w-1/3">BAĞLANTI LİNKİ</TableHead>
-                            <TableHead className="text-white font-semibold tracking-wide w-1/3 text-center">TEKRAR DURUMU</TableHead>
+                            <TableHead className="text-white font-semibold tracking-wide w-1/3">{t('questionTable.columns.question')}</TableHead>
+                            <TableHead className="text-white font-semibold tracking-wide w-1/3">{t('questionTable.columns.link')}</TableHead>
+                            <TableHead className="text-white font-semibold tracking-wide w-1/3 text-center">{t('todayReviewQuestions.reviewStatus')}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -141,7 +125,7 @@ export const TodayReviewQuestions: React.FC = () => {
                                 <TableCell colSpan={3} className="text-center py-12 text-indigo-200/70">
                                     <div className="flex flex-col items-center justify-center h-full min-h-[120px]">
                                         <CheckCircle className="h-10 w-10 opacity-50 mb-3" />
-                                        <span className="text-lg">Bugün için tekrar edilecek soru bulunmuyor.</span>
+                                        <span className="text-lg">{t('todayReviewQuestions.noQuestionsToday')}</span>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -163,7 +147,7 @@ export const TodayReviewQuestions: React.FC = () => {
                                             rel="noopener noreferrer"
                                             className="flex items-center gap-1 text-blue-300 hover:text-blue-100 transition-colors duration-200 group"
                                         >
-                                            <span className="border-b border-blue-300/30 group-hover:border-blue-100">Bağlantı</span>
+                                            <span className="border-b border-blue-300/30 group-hover:border-blue-100">{t('todayReviewQuestions.link')}</span>
                                             <ExternalLink className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                                         </a>
                                     </TableCell>

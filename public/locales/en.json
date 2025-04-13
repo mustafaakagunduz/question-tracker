@@ -1,0 +1,138 @@
+{
+  "appTitle": "ALGORITHM QUESTION TRACKER",
+  "dateDisplay": {
+    "today": "Today"
+  },
+  "header": {
+    "help": "Help"
+  },
+  "todayReviewQuestions": {
+    "title": "Questions to Review Today",
+    "allCompleted": "All reviews completed",
+    "completed": "completed",
+    "noQuestionsToday": "No questions to review for today.",
+    "link": "Link",
+    "reviewStatus": "REVIEW STATUS"
+  },
+  "questionTable": {
+    "title": "Solved Algorithm Questions",
+    "addQuestion": "Add New Question",
+    "emptyTableMessage": "No questions added yet. Click the button in the top right to add a new question.",
+    "columns": {
+      "question": "QUESTION",
+      "site": "SITE",
+      "link": "LINK",
+      "solvedDate": "SOLVED DATE",
+      "difficulty": "DIFFICULTY LEVEL",
+      "reviewDate": "REVIEW DATE",
+      "actions": "ACTIONS"
+    },
+    "link": "Link"
+  },
+  "addQuestionDialog": {
+    "title": "Add New Algorithm Question",
+    "questionTitle": "Question Title",
+    "titlePlaceholder": "e.g.: Two Sum",
+    "platform": "Platform",
+    "platformPlaceholder": "LeetCode, HackerRank, etc.",
+    "link": "Link",
+    "linkPlaceholder": "https://...",
+    "solvedDate": "Date Solved",
+    "difficultyLevel": "Difficulty Level",
+    "daysLater": "days later review",
+    "reviewDate": "Review Date",
+    "reviewDateInfo": "This date is automatically calculated based on the selected difficulty level.",
+    "cancel": "Cancel",
+    "save": "Save",
+    "validation": "Please fill in all fields."
+  },
+  "editQuestionDialog": {
+    "title": "Edit Algorithm Question",
+    "questionTitle": "Question Title",
+    "platform": "Platform",
+    "platformPlaceholder": "LeetCode, HackerRank, etc.",
+    "link": "Link",
+    "linkPlaceholder": "https://...",
+    "solvedDate": "Date Solved",
+    "difficultyLevel": "Difficulty Level",
+    "daysLater": "days later review",
+    "reviewDate": "Review Date",
+    "reviewDateInfo": "This date is automatically calculated based on the selected difficulty level.",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "deleteConfirmDialog": {
+    "title": "Delete Question",
+    "confirmMessage": "Are you sure you want to delete the question",
+    "warning": "This action cannot be undone",
+    "cancel": "Cancel",
+    "confirm": "Yes, Delete"
+  },
+  "difficultyLevels": {
+    "veryEasy": "Very Easy",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "veryHard": "Very Hard"
+  },
+  "helpDialog": {
+    "title": "Algorithm Question Tracker - Help",
+    "description": "This application helps you track your algorithm questions and reinforce your learning through regular reviews.",
+    "tabs": {
+      "general": "General Info",
+      "questions": "Question Management",
+      "reviews": "Review System"
+    },
+    "generalInfo": {
+      "aboutTitle": "About the Application",
+      "aboutText": "This is a tool that tracks algorithm questions as you solve them and applies a smart repeat system based on difficulty level.",
+      "interfaceTitle": "The interface consists of three main sections:",
+      "interfaceItems": {
+        "item1": "Today's date",
+        "item2": "List of questions to be reviewed today",
+        "item3": "Main table with all questions"
+      },
+      "dataStorageTitle": "Where is Data Stored?",
+      "dataStorageText": "All your data is stored in your browser's localStorage. This means that the data will only remain on the device you are using. If you switch to a different device or browser, your data will not appear there."
+    },
+    "questionManagement": {
+      "addingTitle": "Adding Questions",
+      "addingText": "You can add a new question by clicking the + button in the top right. You need to enter the following information for each question:",
+      "addingItems": {
+        "item1": "Question title",
+        "item2": "Platform (LeetCode, HackerRank, etc.)",
+        "item3": "Link",
+        "item4": "Date solved",
+        "item5": "Difficulty level"
+      },
+      "editingTitle": "Editing and Deleting Questions",
+      "editingText": "You can update or remove questions using the edit and delete buttons on the right side of each question.",
+      "deleteWarning": "The deletion operation cannot be undone."
+    },
+    "reviewSystem": {
+      "howItWorksTitle": "How the Review System Works",
+      "howItWorksText": "The application works on a spaced repetition logic. Review dates are automatically determined according to difficulty level:",
+      "difficultyInfo": {
+        "veryEasy": "Very Easy",
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard",
+        "veryHard": "Very Hard",
+        "days": "days later"
+      },
+      "reviewAppearText": "When the review date comes, the question appears in the \"Questions to Review Today\" list.",
+      "markingTitle": "Review Marking",
+      "markingText": "When you review a question, check the checkbox next to it. Marked questions are shown with a green background to indicate they have been reviewed.",
+      "accidentalMarkText": "If you mark by mistake, you can uncheck it by clicking again.",
+      "dailyResetText": "Review statuses are only valid for that day and reset at the end of the day."
+    },
+    "footerText": "This application is designed to help make your algorithm studies more systematic. Regular reviews will increase the effectiveness of your learning process."
+  },
+  "footer": {
+    "copyright": "Algorithm Question Tracker - All data is stored in your browser"
+  },
+  "language": {
+    "en": "English",
+    "tr": "Turkish"
+  }
+}

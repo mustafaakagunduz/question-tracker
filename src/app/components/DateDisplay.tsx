@@ -1,15 +1,19 @@
+"use client"
 import React from 'react';
 import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { tr, enUS } from 'date-fns/locale';
 import { Card, CardContent } from '@/components/ui/card';
 import { CalendarIcon } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export const DateDisplay = () => {
+    const { language, t } = useLanguage();
     const today = new Date();
+    const locale = language === 'tr' ? tr : enUS;
 
     // Tarih formatları
-    const fullDate = format(today, 'PPP', { locale: tr });
-    const dayName = format(today, 'EEEE', { locale: tr });
+    const fullDate = format(today, 'PPP', { locale });
+    const dayName = format(today, 'EEEE', { locale });
     const dayNumber = format(today, 'd');
 
     return (

@@ -5,37 +5,30 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, ExternalLink, Edit, Trash2 } from 'lucide-react';
 import { format, compareAsc } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { tr, enUS } from 'date-fns/locale';
 import AddQuestionDialog from './AddQuestionDialog';
 import EditQuestionDialog from './EditQuestionDialog';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
-
-// Zorluk seviyesi türleri
-type DifficultyLevel = 'Çok Kolay' | 'Kolay' | 'Orta' | 'Zor' | 'Çok Zor';
-
-// Soru verisi için tip tanımı
-interface Question {
-    id: number;
-    title: string;
-    site: string;
-    link: string;
-    solvedDate: Date | null;
-    difficulty: DifficultyLevel;
-    reviewDate: Date | null;
-}
+import { useLanguage } from '../contexts/LanguageContext';
+import { Question } from '../types';
 
 // Zorluk seviyelerine göre renk belirleme
-const getDifficultyColor = (difficulty: DifficultyLevel): string => {
+const getDifficultyColor = (difficulty: string): string => {
     switch (difficulty) {
         case 'Çok Kolay':
+        case 'Very Easy':
             return 'bg-gradient-to-r from-green-200 to-green-100 text-green-800 hover:shadow-md hover:from-green-300 hover:to-green-200 font-medium';
         case 'Kolay':
+        case 'Easy':
             return 'bg-gradient-to-r from-emerald-200 to-emerald-100 text-emerald-800 hover:shadow-md hover:from-emerald-300 hover:to-emerald-200 font-medium';
         case 'Orta':
+        case 'Medium':
             return 'bg-gradient-to-r from-amber-200 to-amber-100 text-amber-800 hover:shadow-md hover:from-amber-300 hover:to-amber-200 font-medium';
         case 'Zor':
+        case 'Hard':
             return 'bg-gradient-to-r from-orange-200 to-orange-100 text-orange-800 hover:shadow-md hover:from-orange-300 hover:to-orange-200 font-medium';
         case 'Çok Zor':
+        case 'Very Hard':
             return 'bg-gradient-to-r from-red-200 to-red-100 text-red-800 hover:shadow-md hover:from-red-300 hover:to-red-200 font-medium';
         default:
             return 'bg-gradient-to-r from-gray-200 to-gray-100 text-gray-800 hover:shadow-md hover:from-gray-300 hover:to-gray-200 font-medium';
@@ -100,11 +93,13 @@ const sortQuestionsByReviewDate = (questions: Question[]): Question[] => {
 };
 
 export const QuestionTable: React.FC = () => {
+    const { language, t } = useLanguage();
     const [questions, setQuestions] = useState<Question[]>([]);
     const [addDialogOpen, setAddDialogOpen] = useState(false);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
+    const locale = language === 'tr' ? tr : enUS;
 
     // Sayfa yüklendiğinde localStorage'dan veri yükleme
     useEffect(() => {
@@ -120,7 +115,7 @@ export const QuestionTable: React.FC = () => {
     // Tarih formatlama fonksiyonu
     const formatDate = (date: Date | null): string => {
         if (!date) return '-';
-        return format(date, 'd MMMM yyyy', { locale: tr });
+        return format(date, 'd MMMM yyyy', { locale });
     };
 
     // Yeni soru ekleme dialog'unu aç
@@ -191,13 +186,13 @@ export const QuestionTable: React.FC = () => {
 
             <div className="w-full rounded-xl overflow-hidden border border-indigo-300/20 shadow-2xl bg-gradient-to-br from-indigo-950/80 to-purple-900/70 backdrop-blur-md">
                 <div className="flex items-center justify-between p-6 border-b border-indigo-300/20">
-                    <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">Çözülmüş Olan Algoritma Soruları</h2>
+                    <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">{t('questionTable.title')}</h2>
                     <Button
                         onClick={handleAddQuestion}
                         className="flex items-center gap-2 bg-indigo-800/70 hover:bg-indigo-700 text-indigo-200 hover:text-white rounded-lg px-4 py-2 shadow-md hover:shadow-lg border border-indigo-400/20 transition-all duration-200"
                     >
                         <PlusCircle className="h-5 w-5 opacity-80" />
-                        <span>Yeni Soru Ekle</span>
+                        <span>{t('questionTable.addQuestion')}</span>
                     </Button>
                 </div>
 
@@ -205,13 +200,13 @@ export const QuestionTable: React.FC = () => {
                     <Table>
                         <TableHeader className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80">
                             <TableRow className="border-b-0">
-                                <TableHead className="text-white font-semibold tracking-wide">SORU</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide">SİTE</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide">BAĞLANTI LİNKİ</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide">ÇÖZDÜĞÜM TARİH</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide">ZORLUK SEVİYESİ</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide">TEKRAR EDİLECEK TARİH</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide text-right">İŞLEMLER</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.question')}</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.site')}</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.link')}</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.solvedDate')}</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.difficulty')}</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.reviewDate')}</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide text-right">{t('questionTable.columns.actions')}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -220,7 +215,7 @@ export const QuestionTable: React.FC = () => {
                                     <TableCell colSpan={7} className="text-center py-12 text-indigo-200/70">
                                         <div className="flex flex-col items-center gap-3">
                                             <PlusCircle className="h-10 w-10 opacity-50" />
-                                            <span className="text-lg">Henüz soru eklenmemiş. Yeni bir soru eklemek için sağ üstteki butonuna tıklayın.</span>
+                                            <span className="text-lg">{t('questionTable.emptyTableMessage')}</span>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -239,7 +234,7 @@ export const QuestionTable: React.FC = () => {
                                                 rel="noopener noreferrer"
                                                 className="flex items-center gap-1 text-blue-300 hover:text-blue-100 transition-colors duration-200 group"
                                             >
-                                                <span className="border-b border-blue-300/30 group-hover:border-blue-100">Bağlantı</span>
+                                                <span className="border-b border-blue-300/30 group-hover:border-blue-100">{t('questionTable.link')}</span>
                                                 <ExternalLink className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                                             </a>
                                         </TableCell>

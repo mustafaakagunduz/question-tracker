@@ -1,0 +1,138 @@
+{
+  "appTitle": "ALGORİTMA SORU TAKİBİ",
+  "dateDisplay": {
+    "today": "Bugün"
+  },
+  "header": {
+    "help": "Yardım"
+  },
+  "todayReviewQuestions": {
+    "title": "Bugün Tekrar Edilecek Sorular",
+    "allCompleted": "Tüm tekrarlar tamamlandı",
+    "completed": "tamamlandı",
+    "noQuestionsToday": "Bugün için tekrar edilecek soru bulunmuyor.",
+    "link": "Bağlantı",
+    "reviewStatus": "TEKRAR DURUMU"
+  },
+  "questionTable": {
+    "title": "Çözülmüş Olan Algoritma Soruları",
+    "addQuestion": "Yeni Soru Ekle",
+    "emptyTableMessage": "Henüz soru eklenmemiş. Yeni bir soru eklemek için sağ üstteki butonuna tıklayın.",
+    "columns": {
+      "question": "SORU",
+      "site": "SİTE",
+      "link": "BAĞLANTI LİNKİ",
+      "solvedDate": "ÇÖZDÜĞÜM TARİH",
+      "difficulty": "ZORLUK SEVİYESİ",
+      "reviewDate": "TEKRAR EDİLECEK TARİH",
+      "actions": "İŞLEMLER"
+    },
+    "link": "Bağlantı"
+  },
+  "addQuestionDialog": {
+    "title": "Yeni Algoritma Sorusu Ekle",
+    "questionTitle": "Soru Başlığı",
+    "titlePlaceholder": "Örn: İki Sayının Toplamı",
+    "platform": "Platform",
+    "platformPlaceholder": "LeetCode, HackerRank, vb.",
+    "link": "Bağlantı Linki",
+    "linkPlaceholder": "https://...",
+    "solvedDate": "Çözdüğüm Tarih",
+    "difficultyLevel": "Zorluk Seviyesi",
+    "daysLater": "gün sonra tekrar",
+    "reviewDate": "Tekrar Edilecek Tarih",
+    "reviewDateInfo": "Bu tarih, seçtiğiniz zorluk seviyesine göre otomatik olarak hesaplanır.",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "validation": "Lütfen tüm alanları doldurun."
+  },
+  "editQuestionDialog": {
+    "title": "Algoritma Sorusu Düzenle",
+    "questionTitle": "Soru Başlığı",
+    "platform": "Platform",
+    "platformPlaceholder": "LeetCode, HackerRank, vb.",
+    "link": "Bağlantı Linki",
+    "linkPlaceholder": "https://...",
+    "solvedDate": "Çözdüğüm Tarih",
+    "difficultyLevel": "Zorluk Seviyesi",
+    "daysLater": "gün sonra tekrar",
+    "reviewDate": "Tekrar Edilecek Tarih",
+    "reviewDateInfo": "Bu tarih, seçtiğiniz zorluk seviyesine göre otomatik olarak hesaplanır.",
+    "cancel": "İptal",
+    "save": "Kaydet"
+  },
+  "deleteConfirmDialog": {
+    "title": "Soruyu Sil",
+    "confirmMessage": "sorusunu silmek istediğinizden emin misiniz?",
+    "warning": "Bu işlem geri alınamaz",
+    "cancel": "İptal",
+    "confirm": "Evet, Sil"
+  },
+  "difficultyLevels": {
+    "veryEasy": "Çok Kolay",
+    "easy": "Kolay",
+    "medium": "Orta",
+    "hard": "Zor",
+    "veryHard": "Çok Zor"
+  },
+  "helpDialog": {
+    "title": "Algoritma Soru Takibi - Yardım",
+    "description": "Bu uygulama, algoritma sorularınızı takip etmenize ve düzenli tekrarlarla öğrenmenizi pekiştirmenize yardımcı olur.",
+    "tabs": {
+      "general": "Genel Bilgi",
+      "questions": "Soru Yönetimi",
+      "reviews": "Tekrar Sistemi"
+    },
+    "generalInfo": {
+      "aboutTitle": "Uygulama Hakkında",
+      "aboutText": "Bu uygulama, algoritma sorularını çözdükçe takip eden ve zorluk seviyesine göre akıllı bir tekrar sistemi uygulayan bir araçtır.",
+      "interfaceTitle": "Arayüz üç ana bölümden oluşur:",
+      "interfaceItems": {
+        "item1": "Bugünün tarihi",
+        "item2": "Bugün tekrar edilecek sorular listesi",
+        "item3": "Tüm soruların bulunduğu ana tablo"
+      },
+      "dataStorageTitle": "Veriler Nerede Saklanır?",
+      "dataStorageText": "Tüm verileriniz tarayıcınızın localStorage'ında saklanır. Bu, verilerin sadece kullandığınız cihazda kalacağı anlamına gelir. Farklı bir cihaz veya tarayıcıya geçerseniz, verileriniz orada görünmeyecektir."
+    },
+    "questionManagement": {
+      "addingTitle": "Soru Ekleme",
+      "addingText": "Sağ üstteki + butonuna tıklayarak yeni bir soru ekleyebilirsiniz. Her soru için aşağıdaki bilgileri girmelisiniz:",
+      "addingItems": {
+        "item1": "Soru başlığı",
+        "item2": "Platform (LeetCode, HackerRank vb.)",
+        "item3": "Bağlantı linki",
+        "item4": "Çözdüğünüz tarih",
+        "item5": "Zorluk seviyesi"
+      },
+      "editingTitle": "Soru Düzenleme ve Silme",
+      "editingText": "Her sorunun sağ tarafındaki düzenleme ve silme butonlarını kullanarak soruları güncelleyebilir veya kaldırabilirsiniz.",
+      "deleteWarning": "Silme işlemi geri alınamaz."
+    },
+    "reviewSystem": {
+      "howItWorksTitle": "Tekrar Sistemi Nasıl Çalışır?",
+      "howItWorksText": "Uygulama, aralıklı tekrar (spaced repetition) mantığı ile çalışır. Zorluk seviyesine göre tekrar tarihleri otomatik olarak belirlenir:",
+      "difficultyInfo": {
+        "veryEasy": "Çok Kolay",
+        "easy": "Kolay",
+        "medium": "Orta",
+        "hard": "Zor",
+        "veryHard": "Çok Zor",
+        "days": "gün sonra"
+      },
+      "reviewAppearText": "Tekrar edilmesi gereken tarih geldiğinde, soru \"Bugün Tekrar Edilecek Sorular\" listesinde görünür.",
+      "markingTitle": "Tekrar İşaretleme",
+      "markingText": "Bir soruyu tekrar ettiğinizde, yanındaki onay kutusunu işaretleyin. İşaretli sorular, tekrar edildiğini belirtmek için yeşil arka plan ile gösterilir.",
+      "accidentalMarkText": "Eğer yanlışlıkla işaretlerseniz, tekrar tıklayarak işareti kaldırabilirsiniz.",
+      "dailyResetText": "Tekrar durumları sadece o gün için geçerlidir ve gün sonunda sıfırlanır."
+    },
+    "footerText": "Bu uygulama, algoritma çalışmalarınızı daha sistematik hale getirmenize yardımcı olmak amacıyla tasarlanmıştır. Düzenli tekrarlar, öğrenme sürecinizin etkinliğini artıracaktır."
+  },
+  "footer": {
+    "copyright": "Algoritma Soru Takibi - Tüm veriler tarayıcınızda saklanır"
+  },
+  "language": {
+    "en": "İngilizce",
+    "tr": "Türkçe"
+  }
+}
