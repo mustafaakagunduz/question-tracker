@@ -13,7 +13,7 @@ interface LanguageContextType {
 
 // Varsayılan bağlam değeri
 const defaultContext: LanguageContextType = {
-    language: 'en',
+    language: 'tr',
     setLanguage: () => {},
     t: () => '',
 };
