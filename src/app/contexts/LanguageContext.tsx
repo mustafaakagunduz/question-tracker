@@ -35,13 +35,44 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     // Dil durumu ve çeviriler
     const [language, setLanguage] = useState<Language>('tr');
     const [translations, setTranslations] = useState<Translations>({});
+    const [initialized, setInitialized] = useState(false);
+
+    // İlk yükleme: localStorage'dan dil tercihini al
+    useEffect(() => {
+        if (typeof window !== 'undefined' && !initialized) {
+            try {
+                console.log("Initializing language from localStorage");
+                const savedLanguage = localStorage.getItem('language');
+                console.log("Saved language from localStorage:", savedLanguage);
+
+                if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'tr')) {
+                    console.log("Setting language to:", savedLanguage);
+                    setLanguage(savedLanguage as Language);
+                } else {
+                    // Tarayıcı diline göre varsayılan dil seç
+                    const browserLang = navigator.language.startsWith('tr') ? 'tr' : 'en';
+                    console.log("Browser language detected:", browserLang);
+                    console.log("Setting default language to:", browserLang);
+                    setLanguage(browserLang);
+                    localStorage.setItem('language', browserLang);
+                }
+                setInitialized(true);
+            } catch (error) {
+                console.error("Error initializing language:", error);
+            }
+        }
+    }, [initialized]);
 
     // Çevirileri yükle
     useEffect(() => {
         const loadTranslations = async () => {
+            if (!initialized && language === 'tr') return; // İlk yükleme tamamlanmadan çevirileri yükleme
+
             try {
+                console.log("Loading translations for language:", language);
                 const response = await fetch(`/locales/${language}.json`);
                 const data = await response.json();
+                console.log("Translations loaded successfully");
                 setTranslations(data);
             } catch (error) {
                 console.error('Çeviriler yüklenirken hata oluştu:', error);
@@ -49,28 +80,15 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
         };
 
         loadTranslations();
-    }, [language]);
+    }, [language, initialized]);
 
-    // Kullanıcı dil tercihini kaydet
+    // Kullanıcı dil tercihini kaydet (dil değiştiğinde)
     useEffect(() => {
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && initialized) {
+            console.log("Saving language to localStorage:", language);
             localStorage.setItem('language', language);
         }
-    }, [language]);
-
-    // Sayfa yüklendiğinde kaydedilmiş dil tercihini al
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const savedLanguage = localStorage.getItem('language') as Language;
-            if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'tr')) {
-                setLanguage(savedLanguage);
-            } else {
-                // Tarayıcı diline göre varsayılan dil seç
-                const browserLang = navigator.language.startsWith('tr') ? 'tr' : 'en';
-                setLanguage(browserLang);
-            }
-        }
-    }, []);
+    }, [language, initialized]);
 
     // Çeviri fonksiyonu
     const t = (key: string): string => {

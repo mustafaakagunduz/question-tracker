@@ -15,7 +15,16 @@ export const Header = () => {
     const { language, setLanguage, t } = useLanguage();
 
     const toggleLanguage = (newLang: 'en' | 'tr') => {
+        console.log("Toggling language to:", newLang);
         setLanguage(newLang);
+
+        // Direkt olarak burada localStorage'a da kaydet (çift güvenlik için)
+        try {
+            localStorage.setItem('language', newLang);
+            console.log("Language saved to localStorage from Header component");
+        } catch (error) {
+            console.error("Error saving language to localStorage:", error);
+        }
     };
 
     return (
