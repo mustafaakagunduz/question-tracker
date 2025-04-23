@@ -15,7 +15,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 export const HelpButton = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { t } = useLanguage();
-
+    //deneme push
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
