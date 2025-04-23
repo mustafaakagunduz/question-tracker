@@ -34,7 +34,7 @@ export const HelpButton = () => {
                         {t('helpDialog.title')}
                     </DialogTitle>
                     <DialogDescription className="text-indigo-200/80">
-                        {t('helpDialog.description')}
+                        {t('helpDialog.footerText')}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -79,19 +79,15 @@ export const HelpButton = () => {
                             {t('helpDialog.reviewSystem.markingText')}
                         </p>
                         <p className="mt-3">
-                            {t('helpDialog.reviewSystem.accidentalMarkText')}
+
                         </p>
                         <p className="mt-3 p-2 bg-indigo-800/40 rounded border border-indigo-500/20">
-                            <strong>Not:</strong> {t('helpDialog.reviewSystem.dailyResetText')}
+                             {t('helpDialog.reviewSystem.dailyResetText')}
                         </p>
                     </div>
                 </div>
 
-                <div className="mt-6 border-t border-indigo-300/10 pt-4 px-2">
-                    <p className="text-indigo-200/70 text-sm">
-                        {t('helpDialog.footerText')}
-                    </p>
-                </div>
+
             </DialogContent>
         </Dialog>
     );
