@@ -17,21 +17,21 @@ const getDifficultyColor = (difficulty: string): string => {
     switch (difficulty) {
         case 'Çok Kolay':
         case 'Very Easy':
-            return 'bg-gradient-to-r from-green-200 to-green-100 text-green-800 hover:shadow-md hover:from-green-300 hover:to-green-200 font-medium';
+            return 'bg-gradient-to-r from-green-200 to-green-100 text-green-800  font-medium';
         case 'Kolay':
         case 'Easy':
-            return 'bg-gradient-to-r from-emerald-200 to-emerald-100 text-emerald-800 hover:shadow-md hover:from-emerald-300 hover:to-emerald-200 font-medium';
+            return 'bg-gradient-to-r from-emerald-200 to-emerald-100 text-emerald-800  font-medium';
         case 'Orta':
         case 'Medium':
-            return 'bg-gradient-to-r from-amber-200 to-amber-100 text-amber-800 hover:shadow-md hover:from-amber-300 hover:to-amber-200 font-medium';
+            return 'bg-gradient-to-r from-amber-200 to-amber-100 text-amber-800  font-medium';
         case 'Zor':
         case 'Hard':
-            return 'bg-gradient-to-r from-orange-200 to-orange-100 text-orange-800 hover:shadow-md hover:from-orange-300 hover:to-orange-200 font-medium';
+            return 'bg-gradient-to-r from-orange-200 to-orange-100 text-orange-800  font-medium';
         case 'Çok Zor':
         case 'Very Hard':
-            return 'bg-gradient-to-r from-red-200 to-red-100 text-red-800 hover:shadow-md hover:from-red-300 hover:to-red-200 font-medium';
+            return 'bg-gradient-to-r from-red-200 to-red-100 text-red-800  font-medium';
         default:
-            return 'bg-gradient-to-r from-gray-200 to-gray-100 text-gray-800 hover:shadow-md hover:from-gray-300 hover:to-gray-200 font-medium';
+            return 'bg-gradient-to-r from-gray-200 to-gray-100 text-gray-800  font-medium';
     }
 };
 
