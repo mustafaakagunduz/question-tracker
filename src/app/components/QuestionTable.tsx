@@ -17,21 +17,21 @@ const getDifficultyColor = (difficulty: string): string => {
     switch (difficulty) {
         case 'Çok Kolay':
         case 'Very Easy':
-            return 'bg-gradient-to-r from-green-200 to-green-100 text-green-800 hover:shadow-md hover:from-green-300 hover:to-green-200 font-medium';
+            return 'bg-green-500/15 text-green-300 hover:shadow-md hover:from-green-300 hover:to-green-200 font-medium border border-green-500/20';
         case 'Kolay':
         case 'Easy':
-            return 'bg-gradient-to-r from-emerald-200 to-emerald-100 text-emerald-800 hover:shadow-md hover:from-emerald-300 hover:to-emerald-200 font-medium';
+            return 'bg-emerald-500/15 text-emerald-300 hover:shadow-md hover:from-emerald-300 hover:to-emerald-200 font-medium border border-emerald-500/20';
         case 'Orta':
         case 'Medium':
-            return 'bg-gradient-to-r from-amber-200 to-amber-100 text-amber-800 hover:shadow-md hover:from-amber-300 hover:to-amber-200 font-medium';
+            return 'bg-amber-500/15 text-amber-300 hover:shadow-md hover:from-amber-300 hover:to-amber-200 font-medium border border-amber-500/20';
         case 'Zor':
         case 'Hard':
-            return 'bg-gradient-to-r from-orange-200 to-orange-100 text-orange-800 hover:shadow-md hover:from-orange-300 hover:to-orange-200 font-medium';
+            return 'bg-orange-500/15 text-orange-300 hover:shadow-md hover:from-orange-300 hover:to-orange-200 font-medium border border-orange-500/20';
         case 'Çok Zor':
         case 'Very Hard':
-            return 'bg-gradient-to-r from-red-200 to-red-100 text-red-800 hover:shadow-md hover:from-red-300 hover:to-red-200 font-medium';
+            return 'bg-red-500/15 text-red-300 hover:shadow-md hover:from-red-300 hover:to-red-200 font-medium border border-red-500/20';
         default:
-            return 'bg-gradient-to-r from-gray-200 to-gray-100 text-gray-800 hover:shadow-md hover:from-gray-300 hover:to-gray-200 font-medium';
+            return 'bg-slate-500/15 text-slate-300 hover:shadow-md hover:from-gray-300 hover:to-gray-200 font-medium border border-slate-500/20';
     }
 };
 
@@ -79,16 +79,13 @@ const saveQuestionsToStorage = (questions: Question[]) => {
     }
 };
 
-// Soruları "Tekrar Edilecek Tarih"e göre sıralama
-const sortQuestionsByReviewDate = (questions: Question[]): Question[] => {
+// Soruları "Çözüldüğü Tarih"e göre sıralama (en son eklenen en üstte)
+const sortQuestionsBySolvedDate = (questions: Question[]): Question[] => {
     return [...questions].sort((a, b) => {
-        // Null tarihler en sona yerleştirilir
-        if (a.reviewDate === null && b.reviewDate === null) return 0;
-        if (a.reviewDate === null) return 1;
-        if (b.reviewDate === null) return -1;
-
-        // Tarihler var ise, tarihe göre sıralama (en yakın tarih önce)
-        return compareAsc(a.reviewDate, b.reviewDate);
+        if (a.solvedDate === null && b.solvedDate === null) return 0;
+        if (a.solvedDate === null) return 1;
+        if (b.solvedDate === null) return -1;
+        return compareAsc(b.solvedDate, a.solvedDate);
     });
 };
 
@@ -104,7 +101,7 @@ export const QuestionTable: React.FC = () => {
     // Sayfa yüklendiğinde localStorage'dan veri yükleme
     useEffect(() => {
         const savedQuestions = loadQuestionsFromStorage();
-        setQuestions(sortQuestionsByReviewDate(savedQuestions));
+        setQuestions(sortQuestionsBySolvedDate(savedQuestions));
     }, []);
 
     // Sorular değiştiğinde localStorage'a kaydetme
@@ -137,7 +134,7 @@ export const QuestionTable: React.FC = () => {
 
     // Yeni soru eklendiğinde
     const handleQuestionAdd = (newQuestion: Question) => {
-        const updatedQuestions = sortQuestionsByReviewDate([newQuestion, ...questions]);
+        const updatedQuestions = sortQuestionsBySolvedDate([newQuestion, ...questions]);
         setQuestions(updatedQuestions);
     };
 
@@ -146,7 +143,7 @@ export const QuestionTable: React.FC = () => {
         const updatedQuestions = questions.map(q =>
             q.id === editedQuestion.id ? editedQuestion : q
         );
-        setQuestions(sortQuestionsByReviewDate(updatedQuestions));
+        setQuestions(sortQuestionsBySolvedDate(updatedQuestions));
     };
 
     // Soru silindiğinde
@@ -184,9 +181,9 @@ export const QuestionTable: React.FC = () => {
                 </>
             )}
 
-            <div className="w-full rounded-xl overflow-hidden border border-indigo-300/20 shadow-2xl bg-gradient-to-br from-indigo-950/80 to-purple-900/70 backdrop-blur-md">
-                <div className="flex items-center justify-between p-6 border-b border-indigo-300/20">
-                    <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">{t('questionTable.title')}</h2>
+            <div className="w-full rounded-xl overflow-hidden border border-white/[0.08] shadow-2xl bg-slate-900/50 backdrop-blur-md">
+                <div className="flex items-center justify-between p-6 border-b border-white/[0.08]">
+                    <h2 className="text-2xl font-bold text-white">{t('questionTable.title')}</h2>
                     <Button
                         onClick={handleAddQuestion}
                         className="flex items-center gap-2 bg-indigo-800/70 hover:bg-indigo-700 text-indigo-200 hover:text-white rounded-lg px-4 py-2 shadow-md hover:shadow-lg border border-indigo-400/20 transition-all duration-200"
@@ -198,8 +195,8 @@ export const QuestionTable: React.FC = () => {
 
                 <div className="overflow-hidden">
                     <Table>
-                        <TableHeader className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80">
-                            <TableRow className="border-b-0">
+                        <TableHeader className="bg-indigo-950/60">
+                            <TableRow className="border-b-0 hover:bg-transparent">
                                 <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.question')}</TableHead>
                                 <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.site')}</TableHead>
                                 <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.link')}</TableHead>
@@ -211,7 +208,7 @@ export const QuestionTable: React.FC = () => {
                         </TableHeader>
                         <TableBody>
                             {questions.length === 0 ? (
-                                <TableRow>
+                                <TableRow className="hover:bg-transparent">
                                     <TableCell colSpan={7} className="text-center py-12 text-indigo-200/70">
                                         <div className="flex flex-col items-center gap-3">
                                             <PlusCircle className="h-10 w-10 opacity-50" />
@@ -223,7 +220,7 @@ export const QuestionTable: React.FC = () => {
                                 questions.map((question) => (
                                     <TableRow
                                         key={question.id}
-                                        className="border-b border-indigo-300/10 hover:bg-white/10 transition-all duration-200"
+                                        className="border-b border-white/[0.06] hover:bg-white/10 transition-all duration-200"
                                     >
                                         <TableCell className="font-medium text-white">{question.title}</TableCell>
                                         <TableCell className="text-indigo-100">{question.site}</TableCell>
@@ -252,19 +249,19 @@ export const QuestionTable: React.FC = () => {
                                             <div className="flex justify-end gap-2">
                                                 <Button
                                                     onClick={() => handleEditQuestion(question)}
-                                                    className="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white h-9 w-9 p-0 rounded-lg shadow-md hover:shadow-lg hover:brightness-110 border border-indigo-400/20 transform-none"
-                                                    style={{ transform: 'none', transition: 'background 0.2s, filter 0.2s, box-shadow 0.2s' }}
+                                                    className="bg-transparent text-indigo-300 hover:from-indigo-500 hover:to-indigo-400 hover:bg-transparent h-9 w-9 p-0 rounded-lg border-0 shadow-none cursor-pointer opacity-60 hover:opacity-100 hover:scale-125 transition-all duration-150"
+                                                    style={{  }}
                                                     title="Düzenle"
                                                 >
-                                                    <Edit className="h-4 w-4" />
+                                                    <Edit className="h-6 w-6" />
                                                 </Button>
                                                 <Button
                                                     onClick={() => handleDeleteQuestion(question)}
-                                                    className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white h-9 w-9 p-0 rounded-lg shadow-md hover:shadow-lg hover:brightness-110 border border-red-400/20 transform-none"
-                                                    style={{ transform: 'none', transition: 'background 0.2s, filter 0.2s, box-shadow 0.2s' }}
+                                                    className="bg-transparent text-red-400 hover:from-red-500 hover:to-red-400 hover:bg-transparent h-9 w-9 p-0 rounded-lg border-0 shadow-none cursor-pointer opacity-60 hover:opacity-100 hover:scale-125 transition-all duration-150"
+                                                    style={{  }}
                                                     title="Sil"
                                                 >
-                                                    <Trash2 className="h-4 w-4" />
+                                                    <Trash2 className="h-6 w-6" />
                                                 </Button>
                                             </div>
                                         </TableCell>

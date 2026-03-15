@@ -11,7 +11,7 @@ export default function Home() {
     return (
         <>
             <Header />
-            <main className="flex min-h-screen flex-col items-center p-8 bg-gradient-to-br from-indigo-950 to-purple-950 bg-fixed pt-24">
+            <main className="flex min-h-screen flex-col items-center p-8 bg-[#08081a] pt-24">
                 <div className="w-full max-w-6xl space-y-8">
                     <div className="flex flex-col space-y-8 pb-6">
                         {/* Burada bir flex row container kullanarak yan yana yerleştiriyoruz */}

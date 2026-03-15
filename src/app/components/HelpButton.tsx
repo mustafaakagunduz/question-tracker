@@ -20,7 +20,7 @@ export const HelpButton = () => {
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button
-                    className="rounded-full bg-gradient-to-br from-indigo-600 to-purple-700 hover:from-indigo-500 hover:to-purple-600 shadow-lg shadow-indigo-900/30 border border-indigo-400/20 hover:shadow-indigo-700/40 flex items-center gap-2"
+                    className="rounded-full bg-indigo-600 hover:from-indigo-500 hover:to-purple-600 shadow-lg shadow-indigo-900/30 border border-indigo-400/20 hover:shadow-indigo-700/40 flex items-center gap-2"
                     style={{ transform: 'none', transition: 'background 0.2s, filter 0.2s, box-shadow 0.2s' }}
                     aria-label={t('header.help')}
                 >
@@ -28,9 +28,9 @@ export const HelpButton = () => {
                     <span className="text-white">{t('header.help')}</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[650px] max-h-[90vh] overflow-y-auto bg-gradient-to-br from-indigo-950/95 to-purple-950/95 text-white border border-indigo-300/20 shadow-2xl rounded-xl backdrop-blur-md">
+            <DialogContent className="sm:max-w-[650px] max-h-[90vh] overflow-y-auto bg-slate-900/95 text-white border border-white/[0.08] shadow-2xl rounded-xl backdrop-blur-md">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">
+                    <DialogTitle className="text-2xl font-bold text-white">
                         {t('helpDialog.title')}
                     </DialogTitle>
                     <DialogDescription className="text-indigo-200/80">

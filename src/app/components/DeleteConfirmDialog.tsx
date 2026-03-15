@@ -22,17 +22,17 @@ export function DeleteConfirmDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[425px] bg-gradient-to-br from-indigo-950/95 to-purple-950/95 text-white border border-indigo-300/20 shadow-2xl rounded-xl backdrop-blur-md">
+            <DialogContent className="sm:max-w-[425px] bg-slate-900/95 text-white border border-white/[0.08] shadow-2xl rounded-xl backdrop-blur-md">
                 <DialogHeader className="flex flex-col items-center gap-3">
-                    <div className="bg-gradient-to-br from-red-600/30 to-red-800/30 p-4 rounded-full border border-red-500/30 shadow-inner shadow-red-900/20">
+                    <div className="bg-red-600/20 p-4 rounded-full border border-red-500/30 shadow-inner shadow-red-900/20">
                         <AlertTriangle className="h-8 w-8 text-red-400" />
                     </div>
-                    <DialogTitle className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-300 to-red-100">{t('deleteConfirmDialog.title')}</DialogTitle>
+                    <DialogTitle className="text-2xl font-bold text-red-300">{t('deleteConfirmDialog.title')}</DialogTitle>
                 </DialogHeader>
 
                 <div className="text-center text-indigo-100/90 py-5 space-y-4">
                     <p className="text-lg">
-                        <span className="font-bold bg-gradient-to-r from-red-200 to-red-100 bg-clip-text text-transparent">{questionTitle}</span> {t('deleteConfirmDialog.confirmMessage')}?
+                        <span className="font-bold text-red-300">{questionTitle}</span> {t('deleteConfirmDialog.confirmMessage')}?
                     </p>
                     <div className="flex items-center justify-center gap-2 text-sm text-red-300 bg-red-900/20 py-2 px-4 rounded-lg border border-red-500/20 mx-auto max-w-fit">
                         <X className="h-4 w-4" />
@@ -54,7 +54,7 @@ export function DeleteConfirmDialog({
                     <Button
                         type="submit"
                         onClick={onConfirm}
-                        className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-md px-6 py-2 hover:shadow-lg hover:brightness-110 border border-red-400/20 rounded-lg transform-none"
+                        className="bg-red-600 hover:from-red-500 hover:to-red-400 text-white shadow-md px-6 py-2 hover:shadow-lg hover:brightness-110 border border-red-400/20 rounded-lg transform-none"
                         style={{ transform: 'none', transition: 'background 0.2s, filter 0.2s, box-shadow 0.2s' }}
                     >
                         {t('deleteConfirmDialog.confirm')}

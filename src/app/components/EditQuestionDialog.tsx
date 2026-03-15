@@ -21,11 +21,11 @@ interface EditQuestionDialogProps {
 }
 
 export const difficultyLevels = [
-    { value: 5, label: 'difficultyLevels.veryEasy', days: 5, color: 'from-green-200 to-green-100 text-green-800 border-green-200' },
-    { value: 4, label: 'difficultyLevels.easy', days: 4, color: 'from-emerald-200 to-emerald-100 text-emerald-800 border-emerald-200' },
-    { value: 3, label: 'difficultyLevels.medium', days: 3, color: 'from-amber-200 to-amber-100 text-amber-800 border-amber-200' },
-    { value: 2, label: 'difficultyLevels.hard', days: 2, color: 'from-orange-200 to-orange-100 text-orange-800 border-orange-200' },
-    { value: 1, label: 'difficultyLevels.veryHard', days: 1, color: 'from-red-200 to-red-100 text-red-800 border-red-200' },
+    { value: 5, label: 'difficultyLevels.veryEasy', days: 5, color: 'bg-green-500/15 text-green-300 border-green-500/25' },
+    { value: 4, label: 'difficultyLevels.easy', days: 4, color: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/25' },
+    { value: 3, label: 'difficultyLevels.medium', days: 3, color: 'bg-amber-500/15 text-amber-300 border-amber-500/25' },
+    { value: 2, label: 'difficultyLevels.hard', days: 2, color: 'bg-orange-500/15 text-orange-300 border-orange-500/25' },
+    { value: 1, label: 'difficultyLevels.veryHard', days: 1, color: 'bg-red-500/15 text-red-300 border-red-500/25' },
 ];
 
 export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, question }: EditQuestionDialogProps) {
@@ -113,9 +113,9 @@ export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, questio
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px] max-h-[90vh] flex flex-col bg-gradient-to-br from-indigo-950/95 to-purple-950/95 text-white border border-indigo-300/20 shadow-2xl rounded-xl backdrop-blur-md">
+            <DialogContent className="sm:max-w-[500px] max-h-[90vh] flex flex-col bg-slate-900/95 text-white border border-white/[0.08] shadow-2xl rounded-xl backdrop-blur-md">
                 <DialogHeader className="mb-2 flex-shrink-0">
-                    <DialogTitle className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200 flex items-center">
+                    <DialogTitle className="text-2xl font-bold text-white flex items-center">
                         <Edit className="h-6 w-6 mr-2 text-blue-300" />
                         {t('editQuestionDialog.title')}
                     </DialogTitle>
@@ -167,7 +167,7 @@ export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, questio
                                         {format(solvedDate, 'PPP', { locale })}
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="z-50 w-auto p-0 bg-gradient-to-br from-indigo-900 to-indigo-950 border-indigo-300/20 shadow-xl">
+                                <PopoverContent className="z-50 w-auto p-0 bg-slate-900 border-white/[0.08] shadow-xl">
                                     <Calendar
                                         mode="single"
                                         selected={solvedDate}
@@ -196,7 +196,7 @@ export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, questio
                                     <div
                                         key={level.value}
                                         className={`flex items-center space-x-2 p-2 rounded-lg transition-all duration-200 border ${level.value === difficultyLevel
-                                            ? `bg-gradient-to-r ${level.color} border-opacity-50`
+                                            ? level.color
                                             : 'bg-indigo-900/20 hover:bg-indigo-800/30 border-indigo-300/10'}`}
                                     >
                                         <RadioGroupItem
@@ -222,7 +222,7 @@ export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, questio
 
                         <div className="grid gap-2">
                             <Label className="text-indigo-200 font-medium">{t('editQuestionDialog.reviewDate')}</Label>
-                            <div className={`p-3 rounded-lg bg-gradient-to-r ${selectedDifficulty.color} bg-opacity-10 border border-opacity-20 text-center font-medium`}>
+                            <div className={`p-3 rounded-lg border text-center font-medium ${selectedDifficulty.color}`}>
                                 {format(reviewDate, 'PPP', { locale })}
                             </div>
                             <p className="text-xs text-indigo-200/70">
@@ -246,7 +246,7 @@ export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, questio
                     <Button
                         type="submit"
                         onClick={handleSubmit}
-                        className="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white shadow-md hover:shadow-lg hover:brightness-110 border border-indigo-400/20 px-6 py-2 rounded-lg transform-none"
+                        className="bg-indigo-600 hover:from-indigo-500 hover:to-indigo-400 text-white shadow-md hover:shadow-lg hover:brightness-110 border border-indigo-400/20 px-6 py-2 rounded-lg transform-none"
                         style={{ transform: 'none', transition: 'background 0.2s, filter 0.2s, box-shadow 0.2s' }}
                     >
                         {t('editQuestionDialog.save')}

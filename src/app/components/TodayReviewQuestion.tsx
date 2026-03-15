@@ -94,16 +94,16 @@ export const TodayReviewQuestions: React.FC = () => {
     const completedCount = todayQuestions.filter(q => reviewStatus[q.id]).length;
 
     return (
-        <div className="w-full h-full rounded-xl overflow-hidden border border-indigo-300/20 shadow-2xl bg-gradient-to-br from-indigo-950/80 to-purple-900/70 backdrop-blur-md">
-            <div className="flex items-center justify-between p-6 border-b border-indigo-300/20">
-                <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">{t('todayReviewQuestions.title')}</h2>
+        <div className="w-full h-full rounded-xl overflow-hidden border border-white/[0.08] shadow-2xl bg-slate-900/50 backdrop-blur-md">
+            <div className="flex items-center justify-between p-6 border-b border-white/[0.08]">
+                <h2 className="text-2xl font-bold text-white">{t('todayReviewQuestions.title')}</h2>
                 {allReviewed && todayQuestions.length > 0 ? (
-                    <div className="flex items-center bg-gradient-to-r from-emerald-800/30 to-green-800/30 text-green-300 px-4 py-2 rounded-full border border-green-500/20 shadow-inner shadow-green-900/20">
+                    <div className="flex items-center bg-emerald-800/30 text-green-300 px-4 py-2 rounded-full border border-green-500/20 shadow-inner shadow-green-900/20">
                         <CheckCircle className="h-5 w-5 mr-2" />
                         <span className="text-sm font-medium">{t('todayReviewQuestions.allCompleted')}</span>
                     </div>
                 ) : todayQuestions.length > 0 ? (
-                    <div className="flex items-center bg-gradient-to-r from-amber-800/30 to-orange-800/30 text-amber-300 px-4 py-2 rounded-full border border-amber-500/20 shadow-inner shadow-amber-900/20">
+                    <div className="flex items-center bg-amber-800/30 text-amber-300 px-4 py-2 rounded-full border border-amber-500/20 shadow-inner shadow-amber-900/20">
                         <Clock className="h-5 w-5 mr-2" />
                         <span className="text-sm font-medium">{completedCount} / {todayQuestions.length} {t('todayReviewQuestions.completed')}</span>
                     </div>
@@ -112,8 +112,8 @@ export const TodayReviewQuestions: React.FC = () => {
 
             <div className="overflow-hidden h-full flex flex-col">
                 <Table>
-                    <TableHeader className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80">
-                        <TableRow className="border-b-0">
+                    <TableHeader className="bg-indigo-950/60">
+                        <TableRow className="border-b-0 hover:bg-transparent">
                             <TableHead className="text-white font-semibold tracking-wide w-1/3">{t('questionTable.columns.question')}</TableHead>
                             <TableHead className="text-white font-semibold tracking-wide w-1/3">{t('questionTable.columns.link')}</TableHead>
                             <TableHead className="text-white font-semibold tracking-wide w-1/3 text-center">{t('todayReviewQuestions.reviewStatus')}</TableHead>
@@ -121,7 +121,7 @@ export const TodayReviewQuestions: React.FC = () => {
                     </TableHeader>
                     <TableBody>
                         {todayQuestions.length === 0 ? (
-                            <TableRow>
+                            <TableRow className="hover:bg-transparent">
                                 <TableCell colSpan={3} className="text-center py-12 text-indigo-200/70">
                                     <div className="flex flex-col items-center justify-center h-full min-h-[120px]">
                                         <CheckCircle className="h-10 w-10 opacity-50 mb-3" />
@@ -133,9 +133,9 @@ export const TodayReviewQuestions: React.FC = () => {
                             todayQuestions.map((question) => (
                                 <TableRow
                                     key={question.id}
-                                    className={`border-b border-indigo-300/10 ${
+                                    className={`border-b border-white/[0.06] ${
                                         reviewStatus[question.id]
-                                            ? 'bg-gradient-to-r from-green-900/10 to-emerald-900/5 hover:from-green-900/20 hover:to-emerald-900/10'
+                                            ? 'bg-green-900/10 hover:from-green-900/20 hover:to-emerald-900/10'
                                             : 'hover:bg-white/10'
                                     }`}
                                 >
