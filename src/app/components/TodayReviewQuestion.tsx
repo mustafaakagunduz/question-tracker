@@ -1,10 +1,12 @@
 "use client"
 import React, { useState, useEffect, useCallback } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ExternalLink, CheckCircle, Clock } from 'lucide-react';
+import { ExternalLink, CheckCircle, Clock, CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { format } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Question, ReviewStatus } from '../types';
@@ -33,6 +35,7 @@ export const TodayReviewQuestions: React.FC = () => {
     const [nextReviewDate, setNextReviewDate] = useState<Date>(new Date());
     const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false);
     const [savingReschedule, setSavingReschedule] = useState(false);
+    const [datePickerOpen, setDatePickerOpen] = useState(false);
 
     const loadReviewQueue = useCallback(async () => {
         setLoading(true);
@@ -79,6 +82,7 @@ export const TodayReviewQuestions: React.FC = () => {
     const openRescheduleDialog = (question: Question) => {
         setSelectedQuestion(question);
         setNextReviewDate(new Date());
+        setDatePickerOpen(false);
         setRescheduleDialogOpen(true);
     };
 
@@ -128,17 +132,34 @@ export const TodayReviewQuestions: React.FC = () => {
                         <p className="text-sm text-indigo-200/80 mb-3">
                             {selectedQuestion ? `Soru: ${selectedQuestion.title}` : ''}
                         </p>
-                        <div className="rounded-lg border border-white/10 p-2 bg-slate-950/50">
-                            <Calendar
-                                mode="single"
-                                selected={nextReviewDate}
-                                onSelect={(date) => {
-                                    if (date) setNextReviewDate(date);
-                                }}
-                                defaultMonth={nextReviewDate}
-                                locale={locale}
-                                className="text-white"
-                            />
+                        <div className="grid gap-2">
+                            <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className="w-full justify-start text-left font-normal bg-indigo-900/40 border-indigo-300/20 text-white hover:bg-indigo-800/50 hover:border-indigo-300/30"
+                                        style={{ transform: 'none', transition: 'background 0.2s, border-color 0.2s' }}
+                                    >
+                                        <CalendarIcon className="mr-2 h-4 w-4 text-indigo-300" />
+                                        {format(nextReviewDate, 'PPP', { locale })}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="z-[200] w-auto p-0 bg-slate-900 border-white/[0.08] shadow-xl">
+                                    <Calendar
+                                        mode="single"
+                                        selected={nextReviewDate}
+                                        onSelect={(date) => {
+                                            if (date) {
+                                                setNextReviewDate(date);
+                                                setDatePickerOpen(false);
+                                            }
+                                        }}
+                                        defaultMonth={nextReviewDate}
+                                        className="bg-transparent text-white"
+                                        locale={locale}
+                                    />
+                                </PopoverContent>
+                            </Popover>
                         </div>
                     </div>
 
