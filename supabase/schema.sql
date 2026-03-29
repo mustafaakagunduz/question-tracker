@@ -1,3 +1,5 @@
+-- TABLES
+
 create table if not exists public.questions (
   id bigint generated always as identity primary key,
   title text not null,
@@ -18,19 +20,43 @@ create table if not exists public.question_review_status (
   unique (question_id, review_date)
 );
 
+-- RLS ENABLE
+
 alter table public.questions enable row level security;
 alter table public.question_review_status enable row level security;
 
-create policy if not exists "Allow anon full access on questions"
-  on public.questions
-  for all
-  to anon
-  using (true)
-  with check (true);
+-- POLICIES (IDEMPOTENT)
 
-create policy if not exists "Allow anon full access on question_review_status"
-  on public.question_review_status
-  for all
-  to anon
-  using (true)
-  with check (true);
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where policyname = 'Allow anon full access on questions'
+      and tablename = 'questions'
+  ) then
+    create policy "Allow anon full access on questions"
+      on public.questions
+      for all
+      to anon
+      using (true)
+      with check (true);
+  end if;
+end
+$$;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where policyname = 'Allow anon full access on question_review_status'
+      and tablename = 'question_review_status'
+  ) then
+    create policy "Allow anon full access on question_review_status"
+      on public.question_review_status
+      for all
+      to anon
+      using (true)
+      with check (true);
+  end if;
+end
+$$;
