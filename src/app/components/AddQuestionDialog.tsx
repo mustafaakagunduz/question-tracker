@@ -9,7 +9,6 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
 import { CalendarIcon, PlusCircle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Question } from '../types';
@@ -17,7 +16,7 @@ import { Question } from '../types';
 interface AddQuestionDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    onQuestionAdd: (question: Question) => void;
+    onQuestionAdd: (question: Omit<Question, 'id'>) => Promise<void>;
 }
 
 export const difficultyLevels = [
@@ -48,7 +47,7 @@ export function AddQuestionDialog({ open, onOpenChange, onQuestionAdd }: AddQues
     const reviewDate = getReviewDate(solvedDate, difficultyLevel);
     const selectedDifficulty = difficultyLevels.find(d => d.value === difficultyLevel) || difficultyLevels[2];
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!title || !site || !link) {
             alert(t('addQuestionDialog.validation'));
             return;
@@ -59,8 +58,7 @@ export function AddQuestionDialog({ open, onOpenChange, onQuestionAdd }: AddQues
         const difficultyLabel = t(difficultyLabelKey);
 
         // Yeni soru objesi oluştur
-        const newQuestion: Question = {
-            id: Date.now(), // Basit bir ID oluşturma yöntemi
+        const newQuestion: Omit<Question, 'id'> = {
             title,
             site,
             link,
@@ -69,8 +67,13 @@ export function AddQuestionDialog({ open, onOpenChange, onQuestionAdd }: AddQues
             reviewDate: getReviewDate(solvedDate, difficultyLevel),
         };
 
-        // Ana bileşene yeni soruyu gönder
-        onQuestionAdd(newQuestion);
+        try {
+            await onQuestionAdd(newQuestion);
+        } catch (error) {
+            console.error('Soru eklenirken hata oluştu:', error);
+            alert(t('addQuestionDialog.validation'));
+            return;
+        }
 
         // Formu sıfırla
         setTitle('');
@@ -220,7 +223,9 @@ export function AddQuestionDialog({ open, onOpenChange, onQuestionAdd }: AddQues
 
                     <Button
                         type="submit"
-                        onClick={handleSubmit}
+                        onClick={() => {
+                            void handleSubmit();
+                        }}
                         className="bg-indigo-600 hover:from-indigo-500 hover:to-indigo-400 text-white shadow-md hover:shadow-lg border border-indigo-400/20 px-6 py-2 rounded-lg"
                         style={{ transform: 'none', transition: 'background 0.2s, filter 0.2s, box-shadow 0.2s' }}
                     >

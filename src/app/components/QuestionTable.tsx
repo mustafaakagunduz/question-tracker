@@ -11,8 +11,8 @@ import EditQuestionDialog from './EditQuestionDialog';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Question } from '../types';
+import { createQuestion, fetchQuestions, removeQuestion, updateQuestion } from '../lib/questionsApi';
 
-// Zorluk seviyelerine göre renk belirleme
 const getDifficultyColor = (difficulty: string): string => {
     switch (difficulty) {
         case 'Çok Kolay':
@@ -35,51 +35,6 @@ const getDifficultyColor = (difficulty: string): string => {
     }
 };
 
-// Boş başlangıç verisi
-const initialQuestions: Question[] = [];
-
-// LocalStorage yardımcı fonksiyonları
-const STORAGE_KEY = 'algorithm-questions';
-
-// Soruları localStorage'dan yükleme
-const loadQuestionsFromStorage = (): Question[] => {
-    if (typeof window === 'undefined') {
-        return []; // Server-side rendering sırasında boş dizi dön
-    }
-
-    try {
-        const savedQuestionsString = localStorage.getItem(STORAGE_KEY);
-
-        if (!savedQuestionsString) {
-            return []; // Veri yoksa boş dizi dön
-        }
-
-        const savedQuestions = JSON.parse(savedQuestionsString);
-
-        // Date nesnelerini düzeltelim
-        return savedQuestions.map((q: any) => ({
-            ...q,
-            solvedDate: q.solvedDate ? new Date(q.solvedDate) : null,
-            reviewDate: q.reviewDate ? new Date(q.reviewDate) : null
-        }));
-    } catch (error) {
-        console.error('Sorular yüklenirken hata oluştu:', error);
-        return []; // Hata durumunda boş dizi dön
-    }
-};
-
-// Soruları localStorage'a kaydetme
-const saveQuestionsToStorage = (questions: Question[]) => {
-    if (typeof window === 'undefined') return;
-
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
-    } catch (error) {
-        console.error('Sorular kaydedilirken hata oluştu:', error);
-    }
-};
-
-// Soruları "Çözüldüğü Tarih"e göre sıralama (en son eklenen en üstte)
 const sortQuestionsBySolvedDate = (questions: Question[]): Question[] => {
     return [...questions].sort((a, b) => {
         if (a.solvedDate === null && b.solvedDate === null) return 0;
@@ -92,67 +47,83 @@ const sortQuestionsBySolvedDate = (questions: Question[]): Question[] => {
 export const QuestionTable: React.FC = () => {
     const { language, t } = useLanguage();
     const [questions, setQuestions] = useState<Question[]>([]);
+    const [loading, setLoading] = useState(true);
     const [addDialogOpen, setAddDialogOpen] = useState(false);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
     const locale = language === 'tr' ? tr : enUS;
 
-    // Sayfa yüklendiğinde localStorage'dan veri yükleme
     useEffect(() => {
-        const savedQuestions = loadQuestionsFromStorage();
-        setQuestions(sortQuestionsBySolvedDate(savedQuestions));
+        let active = true;
+
+        const loadQuestions = async () => {
+            try {
+                const data = await fetchQuestions();
+                if (!active) return;
+                setQuestions(sortQuestionsBySolvedDate(data));
+            } catch (error) {
+                console.error('Sorular yüklenirken hata oluştu:', error);
+                if (!active) return;
+                alert('Questions could not be loaded from Supabase. Check environment values and table setup.');
+            } finally {
+                if (active) setLoading(false);
+            }
+        };
+
+        void loadQuestions();
+
+        return () => {
+            active = false;
+        };
     }, []);
 
-    // Sorular değiştiğinde localStorage'a kaydetme
-    useEffect(() => {
-        saveQuestionsToStorage(questions);
-    }, [questions]);
-
-    // Tarih formatlama fonksiyonu
     const formatDate = (date: Date | null): string => {
         if (!date) return '-';
         return format(date, 'd MMMM yyyy', { locale });
     };
 
-    // Yeni soru ekleme dialog'unu aç
     const handleAddQuestion = () => {
         setAddDialogOpen(true);
     };
 
-    // Soru düzenleme dialog'unu aç
     const handleEditQuestion = (question: Question) => {
         setSelectedQuestion(question);
         setEditDialogOpen(true);
     };
 
-    // Soru silme dialog'unu aç
     const handleDeleteQuestion = (question: Question) => {
         setSelectedQuestion(question);
         setDeleteDialogOpen(true);
     };
 
-    // Yeni soru eklendiğinde
-    const handleQuestionAdd = (newQuestion: Question) => {
-        const updatedQuestions = sortQuestionsBySolvedDate([newQuestion, ...questions]);
-        setQuestions(updatedQuestions);
+    const handleQuestionAdd = async (newQuestion: Omit<Question, 'id'>) => {
+        const inserted = await createQuestion(newQuestion);
+        setQuestions((current) => sortQuestionsBySolvedDate([inserted, ...current]));
+        setAddDialogOpen(false);
     };
 
-    // Soru düzenlendiğinde
-    const handleQuestionEdit = (editedQuestion: Question) => {
-        const updatedQuestions = questions.map(q =>
-            q.id === editedQuestion.id ? editedQuestion : q
-        );
-        setQuestions(sortQuestionsBySolvedDate(updatedQuestions));
+    const handleQuestionEdit = async (editedQuestion: Question) => {
+        const updated = await updateQuestion(editedQuestion);
+        setQuestions((current) => {
+            const next = current.map((q) => (q.id === updated.id ? updated : q));
+            return sortQuestionsBySolvedDate(next);
+        });
+        setEditDialogOpen(false);
     };
 
-    // Soru silindiğinde
-    const handleQuestionDelete = () => {
-        if (selectedQuestion) {
-            const updatedQuestions = questions.filter(q => q.id !== selectedQuestion.id);
-            setQuestions(updatedQuestions);
+    const handleQuestionDelete = async () => {
+        if (!selectedQuestion) return;
+
+        try {
+            await removeQuestion(selectedQuestion.id);
+            setQuestions((current) => current.filter((q) => q.id !== selectedQuestion.id));
+            setDeleteDialogOpen(false);
+            setSelectedQuestion(null);
+        } catch (error) {
+            console.error('Soru silinirken hata oluştu:', error);
+            alert('Question could not be deleted.');
         }
-        setDeleteDialogOpen(false);
     };
 
     return (
@@ -175,7 +146,9 @@ export const QuestionTable: React.FC = () => {
                     <DeleteConfirmDialog
                         open={deleteDialogOpen}
                         onOpenChange={setDeleteDialogOpen}
-                        onConfirm={handleQuestionDelete}
+                        onConfirm={() => {
+                            void handleQuestionDelete();
+                        }}
                         questionTitle={selectedQuestion.title}
                     />
                 </>
@@ -207,7 +180,13 @@ export const QuestionTable: React.FC = () => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {questions.length === 0 ? (
+                            {loading ? (
+                                <TableRow className="hover:bg-transparent">
+                                    <TableCell colSpan={7} className="text-center py-12 text-indigo-200/70">
+                                        Loading...
+                                    </TableCell>
+                                </TableRow>
+                            ) : questions.length === 0 ? (
                                 <TableRow className="hover:bg-transparent">
                                     <TableCell colSpan={7} className="text-center py-12 text-indigo-200/70">
                                         <div className="flex flex-col items-center gap-3">
@@ -250,7 +229,7 @@ export const QuestionTable: React.FC = () => {
                                                 <Button
                                                     onClick={() => handleEditQuestion(question)}
                                                     className="bg-transparent text-indigo-300 hover:from-indigo-500 hover:to-indigo-400 hover:bg-transparent h-9 w-9 p-0 rounded-lg border-0 shadow-none cursor-pointer opacity-60 hover:opacity-100 hover:scale-125 transition-all duration-150"
-                                                    style={{  }}
+                                                    style={{}}
                                                     title="Düzenle"
                                                 >
                                                     <Edit className="h-6 w-6" />
@@ -258,7 +237,7 @@ export const QuestionTable: React.FC = () => {
                                                 <Button
                                                     onClick={() => handleDeleteQuestion(question)}
                                                     className="bg-transparent text-red-400 hover:from-red-500 hover:to-red-400 hover:bg-transparent h-9 w-9 p-0 rounded-lg border-0 shadow-none cursor-pointer opacity-60 hover:opacity-100 hover:scale-125 transition-all duration-150"
-                                                    style={{  }}
+                                                    style={{}}
                                                     title="Sil"
                                                 >
                                                     <Trash2 className="h-6 w-6" />

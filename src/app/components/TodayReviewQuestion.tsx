@@ -2,96 +2,86 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ExternalLink, CheckCircle, Clock } from 'lucide-react';
-import { isToday } from 'date-fns';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Question, ReviewStatus } from '../types';
+import { fetchQuestions, fetchReviewStatusForDate, setReviewStatusForDate } from '../lib/questionsApi';
 
-// LocalStorage anahtarları
-const QUESTIONS_STORAGE_KEY = 'algorithm-questions';
-const REVIEW_STATUS_STORAGE_KEY = 'today-review-status';
+const toDateOnly = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
 
 export const TodayReviewQuestions: React.FC = () => {
-    const { t, language } = useLanguage();
+    const { t } = useLanguage();
     const [todayQuestions, setTodayQuestions] = useState<Question[]>([]);
     const [reviewStatus, setReviewStatus] = useState<ReviewStatus>({});
+    const [loading, setLoading] = useState(true);
 
-    // localStorage'dan bugünkü soruları yükle
     useEffect(() => {
-        loadTodayQuestions();
-        loadReviewStatus();
-    }, [language]);
+        let active = true;
 
-    // Review durumunu localStorage'dan yükle
-    const loadReviewStatus = (): void => {
-        if (typeof window === 'undefined') return;
+        const loadTodayData = async () => {
+            try {
+                const questions = await fetchQuestions();
+                if (!active) return;
 
-        try {
-            const savedStatus = localStorage.getItem(REVIEW_STATUS_STORAGE_KEY);
-            if (savedStatus) {
-                setReviewStatus(JSON.parse(savedStatus));
+                const todayStr = toDateOnly(new Date());
+                const questionsForToday = questions.filter((q) => {
+                    if (!q.reviewDate) return false;
+                    return toDateOnly(q.reviewDate) === todayStr;
+                });
+
+                setTodayQuestions(questionsForToday);
+
+                const status = await fetchReviewStatusForDate(
+                    questionsForToday.map((q) => q.id),
+                    todayStr
+                );
+
+                if (!active) return;
+                setReviewStatus(status);
+            } catch (error) {
+                console.error('Bugünkü sorular yüklenirken hata oluştu:', error);
+                if (!active) return;
+                alert('Today review data could not be loaded from Supabase.');
+            } finally {
+                if (active) setLoading(false);
             }
-        } catch (error) {
-            console.error('Review durumu yüklenirken hata oluştu:', error);
-        }
-    };
-
-    // Review durumunu localStorage'a kaydet
-    const saveReviewStatus = (newStatus: ReviewStatus): void => {
-        if (typeof window === 'undefined') return;
-
-        try {
-            localStorage.setItem(REVIEW_STATUS_STORAGE_KEY, JSON.stringify(newStatus));
-        } catch (error) {
-            console.error('Review durumu kaydedilirken hata oluştu:', error);
-        }
-    };
-
-    // Bugün tekrar edilmesi gereken soruları yükle
-    const loadTodayQuestions = (): void => {
-        if (typeof window === 'undefined') return;
-
-        try {
-            const savedQuestionsString = localStorage.getItem(QUESTIONS_STORAGE_KEY);
-            if (!savedQuestionsString) return;
-
-            const parsedQuestions = JSON.parse(savedQuestionsString);
-
-            // Date nesnelerini düzelt
-            const questions = parsedQuestions.map((q: any) => ({
-                ...q,
-                solvedDate: q.solvedDate ? new Date(q.solvedDate) : null,
-                reviewDate: q.reviewDate ? new Date(q.reviewDate) : null
-            }));
-
-            // Bugün tekrar edilmesi gereken soruları filtrele
-            const today = new Date();
-            const questionsForToday = questions.filter((q: Question) =>
-                q.reviewDate && isToday(new Date(q.reviewDate))
-            );
-
-            setTodayQuestions(questionsForToday);
-        } catch (error) {
-            console.error('Bugünkü sorular yüklenirken hata oluştu:', error);
-        }
-    };
-
-    // Review durumunu değiştir
-    const handleReviewStatusChange = (questionId: number, status: boolean): void => {
-        const newStatus = {
-            ...reviewStatus,
-            [questionId]: status
         };
 
-        setReviewStatus(newStatus);
-        saveReviewStatus(newStatus);
+        void loadTodayData();
+
+        return () => {
+            active = false;
+        };
+    }, []);
+
+    const handleReviewStatusChange = async (questionId: number, status: boolean): Promise<void> => {
+        const todayStr = toDateOnly(new Date());
+
+        setReviewStatus((current) => ({
+            ...current,
+            [questionId]: status,
+        }));
+
+        try {
+            await setReviewStatusForDate(questionId, todayStr, status);
+        } catch (error) {
+            console.error('Review durumu kaydedilirken hata oluştu:', error);
+            setReviewStatus((current) => ({
+                ...current,
+                [questionId]: !status,
+            }));
+            alert('Review status could not be saved.');
+        }
     };
 
-    // Tüm soruların review edilip edilmediğini kontrol et
     const allReviewed = todayQuestions.length > 0 &&
-        todayQuestions.every(q => reviewStatus[q.id] === true);
+        todayQuestions.every((q) => reviewStatus[q.id] === true);
 
-    // Tamamlanan soru sayısı
-    const completedCount = todayQuestions.filter(q => reviewStatus[q.id]).length;
+    const completedCount = todayQuestions.filter((q) => reviewStatus[q.id]).length;
 
     return (
         <div className="w-full h-full rounded-xl overflow-hidden border border-white/[0.08] shadow-2xl bg-slate-900/50 backdrop-blur-md">
@@ -120,7 +110,13 @@ export const TodayReviewQuestions: React.FC = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {todayQuestions.length === 0 ? (
+                        {loading ? (
+                            <TableRow className="hover:bg-transparent">
+                                <TableCell colSpan={3} className="text-center py-12 text-indigo-200/70">
+                                    Loading...
+                                </TableCell>
+                            </TableRow>
+                        ) : todayQuestions.length === 0 ? (
                             <TableRow className="hover:bg-transparent">
                                 <TableCell colSpan={3} className="text-center py-12 text-indigo-200/70">
                                     <div className="flex flex-col items-center justify-center h-full min-h-[120px]">
@@ -154,7 +150,9 @@ export const TodayReviewQuestions: React.FC = () => {
                                     <TableCell className="w-1/3 text-center">
                                         <div className="flex items-center justify-center">
                                             <button
-                                                onClick={() => handleReviewStatusChange(question.id, !reviewStatus[question.id])}
+                                                onClick={() => {
+                                                    void handleReviewStatusChange(question.id, !reviewStatus[question.id]);
+                                                }}
                                                 className={`h-6 w-6 rounded-full cursor-pointer relative
                                                     ${reviewStatus[question.id]
                                                     ? 'bg-green-500 shadow-md shadow-green-400/30'

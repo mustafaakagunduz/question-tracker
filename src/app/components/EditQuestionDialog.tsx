@@ -16,7 +16,7 @@ import { Question } from '../types';
 interface EditQuestionDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    onQuestionEdit: (question: Question) => void;
+    onQuestionEdit: (question: Question) => Promise<void>;
     question: Question;
 }
 
@@ -83,7 +83,7 @@ export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, questio
     const reviewDate = getReviewDate(solvedDate, difficultyLevel);
     const selectedDifficulty = difficultyLevels.find(d => d.value === difficultyLevel) || difficultyLevels[2];
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!title || !site || !link) {
             alert(t('addQuestionDialog.validation'));
             return;
@@ -104,8 +104,13 @@ export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, questio
             reviewDate: getReviewDate(solvedDate, difficultyLevel),
         };
 
-        // Ana bileşene düzenlenmiş soruyu gönder
-        onQuestionEdit(editedQuestion);
+        try {
+            await onQuestionEdit(editedQuestion);
+        } catch (error) {
+            console.error('Soru güncellenirken hata oluştu:', error);
+            alert(t('addQuestionDialog.validation'));
+            return;
+        }
 
         // Dialog'u kapat
         onOpenChange(false);
@@ -245,7 +250,9 @@ export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, questio
 
                     <Button
                         type="submit"
-                        onClick={handleSubmit}
+                        onClick={() => {
+                            void handleSubmit();
+                        }}
                         className="bg-indigo-600 hover:from-indigo-500 hover:to-indigo-400 text-white shadow-md hover:shadow-lg hover:brightness-110 border border-indigo-400/20 px-6 py-2 rounded-lg transform-none"
                         style={{ transform: 'none', transition: 'background 0.2s, filter 0.2s, box-shadow 0.2s' }}
                     >
