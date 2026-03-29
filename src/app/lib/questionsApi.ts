@@ -135,3 +135,16 @@ export const setReviewStatusForDate = async (
 
   if (error) throw error;
 };
+
+export const updateQuestionNextReviewDate = async (
+  questionId: number,
+  nextReviewDate: string
+): Promise<void> => {
+  const supabase = getClient();
+  const { error } = await supabase
+    .from('questions')
+    .update({ review_date: nextReviewDate })
+    .eq('id', questionId);
+
+  if (error) throw error;
+};
