@@ -52,6 +52,7 @@ export const QuestionTable: React.FC = () => {
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
+    const [reviewDateSortAsc, setReviewDateSortAsc] = useState(false);
     const locale = language === 'tr' ? tr : enUS;
 
     useEffect(() => {
@@ -126,6 +127,15 @@ export const QuestionTable: React.FC = () => {
         }
     };
 
+    const displayedQuestions = reviewDateSortAsc
+        ? [...questions].sort((a, b) => {
+              if (a.reviewDate === null && b.reviewDate === null) return 0;
+              if (a.reviewDate === null) return 1;
+              if (b.reviewDate === null) return -1;
+              return compareAsc(a.reviewDate, b.reviewDate);
+          })
+        : questions;
+
     return (
         <>
             <AddQuestionDialog
@@ -175,7 +185,12 @@ export const QuestionTable: React.FC = () => {
                                 <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.link')}</TableHead>
                                 <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.solvedDate')}</TableHead>
                                 <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.difficulty')}</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.reviewDate')}</TableHead>
+                                <TableHead
+                                    className="text-white font-semibold tracking-wide cursor-pointer select-none"
+                                    onClick={() => setReviewDateSortAsc((prev) => !prev)}
+                                >
+                                    {t('questionTable.columns.reviewDate')}
+                                </TableHead>
                                 <TableHead className="text-white font-semibold tracking-wide text-right">{t('questionTable.columns.actions')}</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -196,10 +211,10 @@ export const QuestionTable: React.FC = () => {
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                questions.map((question) => (
+                                displayedQuestions.map((question) => (
                                     <TableRow
                                         key={question.id}
-                                        className="border-b border-white/[0.06] hover:bg-white/10 transition-all duration-200"
+                                        className="border-b border-white/[0.06]"
                                     >
                                         <TableCell className="font-medium text-white">{question.title}</TableCell>
                                         <TableCell className="text-indigo-100">{question.site}</TableCell>
@@ -228,19 +243,17 @@ export const QuestionTable: React.FC = () => {
                                             <div className="flex justify-end gap-2">
                                                 <Button
                                                     onClick={() => handleEditQuestion(question)}
-                                                    className="bg-transparent text-indigo-300 hover:from-indigo-500 hover:to-indigo-400 hover:bg-transparent h-9 w-9 p-0 rounded-lg border-0 shadow-none cursor-pointer opacity-60 hover:opacity-100 hover:scale-125 transition-all duration-150"
-                                                    style={{}}
+                                                    className="bg-transparent text-indigo-400 hover:bg-transparent h-10 w-10 p-0 rounded-lg border-0 shadow-none cursor-pointer opacity-80 hover:opacity-100 hover:text-indigo-200 hover:scale-125 transition-all duration-150"
                                                     title="Düzenle"
                                                 >
-                                                    <Edit className="h-6 w-6" />
+                                                    <Edit className="h-7 w-7" />
                                                 </Button>
                                                 <Button
                                                     onClick={() => handleDeleteQuestion(question)}
-                                                    className="bg-transparent text-red-400 hover:from-red-500 hover:to-red-400 hover:bg-transparent h-9 w-9 p-0 rounded-lg border-0 shadow-none cursor-pointer opacity-60 hover:opacity-100 hover:scale-125 transition-all duration-150"
-                                                    style={{}}
+                                                    className="bg-transparent text-red-400 hover:bg-transparent h-10 w-10 p-0 rounded-lg border-0 shadow-none cursor-pointer opacity-80 hover:opacity-100 hover:text-red-300 hover:scale-125 transition-all duration-150"
                                                     title="Sil"
                                                 >
-                                                    <Trash2 className="h-6 w-6" />
+                                                    <Trash2 className="h-7 w-7" />
                                                 </Button>
                                             </div>
                                         </TableCell>
