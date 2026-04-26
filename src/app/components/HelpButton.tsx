@@ -81,9 +81,7 @@ export const HelpButton = () => {
                         <p className="mt-3">
 
                         </p>
-                        <p className="mt-3 p-2 bg-indigo-800/40 rounded border border-indigo-500/20">
-                             {t('helpDialog.reviewSystem.dailyResetText')}
-                        </p>
+                        
                     </div>
                 </div>
 

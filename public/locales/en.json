@@ -124,7 +124,7 @@
       },
       "reviewAppearText": "When the review date comes, the question appears in the \"Questions to Review Today\" list.",
       "markingTitle": "Review Marking",
-      "markingText": "When you review a question, check the checkbox next to it. Marked questions are shown with a green background to indicate they have been reviewed.",
+      "markingText": "When you review a question, check the checkbox next to it and pick another date to review that question.",
       "accidentalMarkText": "If you mark by mistake, you can uncheck it by clicking again.",
       "dailyResetText": "Review statuses are only valid for that day and reset at the end of the day."
     },

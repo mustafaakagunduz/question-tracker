@@ -124,7 +124,7 @@
       },
       "reviewAppearText": "Tekrar edilmesi gereken tarih geldiğinde, soru \"Bugün Tekrar Edilecek Sorular\" listesinde görünür.",
       "markingTitle": "Tekrar İşaretleme",
-      "markingText": "Bir soruyu tekrar ettiğinizde, yanındaki onay kutusunu işaretleyin. İşaretli sorular, tekrar edildiğini belirtmek için yeşil arka plan ile gösterilir.",
+      "markingText": "Bir soruyu tekrar ettiğinizde, yanındaki onay kutusunu işaretleyin ve açılan pencereden o soru için bir sonraki tekrar etmek istediğiniz tarihi seçin",
       "accidentalMarkText": "Eğer yanlışlıkla işaretlerseniz, tekrar tıklayarak işareti kaldırabilirsiniz.",
       "dailyResetText": "Tekrar durumları sadece o gün için geçerlidir ve gün sonunda sıfırlanır."
     },
