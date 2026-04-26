@@ -134,5 +134,72 @@
   "language": {
     "en": "İngilizce",
     "tr": "Türkçe"
+  },
+  "auth": {
+    "appSubtitle": "Sorularını takip et, düzenli tekrar et",
+    "loginTab": "Giriş Yap",
+    "registerTab": "Kayıt Ol",
+    "emailLabel": "E-posta",
+    "emailPlaceholder": "ornek@gmail.com",
+    "passwordLabel": "Şifre",
+    "passwordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Şifre tekrar",
+    "minPasswordHint": "En az 6 karakter",
+    "forgotPassword": "Şifremi unuttum",
+    "loginButton": "Giriş Yap",
+    "loginButtonLoading": "Giriş yapılıyor...",
+    "registerButton": "Kayıt Ol",
+    "registerButtonLoading": "Kayıt yapılıyor...",
+    "googleButton": "Google ile {action}",
+    "googleLogin": "giriş yap",
+    "googleRegister": "kayıt ol",
+    "orDivider": "veya",
+    "signOut": "Çıkış Yap",
+    "otp": {
+      "title": "E-postanı doğrula",
+      "description": "{email} adresine gönderilen 6 haneli kodu gir",
+      "verifyButton": "Doğrula",
+      "verifyingButton": "Doğrulanıyor...",
+      "resendButton": "Kodu tekrar gönder",
+      "resendCooldown": "Tekrar gönder ({s}s)"
+    },
+    "forgotForm": {
+      "title": "Şifreni sıfırla",
+      "subtitle": "E-posta adresine sıfırlama linki göndereceğiz",
+      "sendButton": "Sıfırlama linki gönder",
+      "sendingButton": "Gönderiliyor...",
+      "backToLogin": "← Giriş yap"
+    },
+    "forgotSent": {
+      "title": "E-posta gönderildi",
+      "description": "{email} adresine şifre sıfırlama linki gönderildi. Gelen kutunu ve spam klasörünü kontrol et.",
+      "backToLogin": "← Giriş yap"
+    },
+    "resetPassword": {
+      "title": "Yeni şifre belirle",
+      "newPasswordLabel": "Yeni şifre",
+      "updateButton": "Şifremi Güncelle",
+      "updatingButton": "Güncelleniyor...",
+      "successTitle": "Şifren güncellendi",
+      "successSubtitle": "Ana sayfaya yönlendiriliyorsun..."
+    },
+    "callback": {
+      "loading": "Giriş yapılıyor..."
+    },
+    "errors": {
+      "invalidLogin": "E-posta veya şifre hatalı.",
+      "loginFailed": "Giriş başarısız.",
+      "alreadyRegistered": "Bu e-posta zaten kayıtlı. Giriş yapmayı deneyin.",
+      "registerFailed": "Kayıt başarısız.",
+      "passwordMismatch": "Şifreler eşleşmiyor.",
+      "passwordTooShort": "Şifre en az 6 karakter olmalı.",
+      "otpIncomplete": "6 haneli kodu eksiksiz girin.",
+      "otpExpired": "Kod süresi doldu. Yeni kod isteyin.",
+      "otpInvalid": "Kod hatalı.",
+      "resendFailed": "Kod gönderilemedi.",
+      "resetFailed": "Sıfırlama e-postası gönderilemedi.",
+      "updateFailed": "Şifre güncellenemedi.",
+      "googleFailed": "Google ile giriş başarısız."
+    }
   }
 }

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,6 +10,7 @@ import { Label } from '@/components/ui/label';
 export default function ResetPasswordPage() {
   const router = useRouter();
   const { user, loading, updatePassword } = useAuth();
+  const { t } = useLanguage();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState('');
@@ -21,22 +23,16 @@ export default function ResetPasswordPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== confirm) {
-      setError('Şifreler eşleşmiyor.');
-      return;
-    }
-    if (password.length < 6) {
-      setError('Şifre en az 6 karakter olmalı.');
-      return;
-    }
+    if (password !== confirm) { setError(t('auth.errors.passwordMismatch')); return; }
+    if (password.length < 6) { setError(t('auth.errors.passwordTooShort')); return; }
     setBusy(true);
     setError('');
     try {
       await updatePassword(password);
       setSuccess(true);
       setTimeout(() => router.replace('/'), 2000);
-    } catch (e: any) {
-      setError(e.message ?? 'Şifre güncellenemedi.');
+    } catch {
+      setError(t('auth.errors.updateFailed'));
     } finally {
       setBusy(false);
     }
@@ -48,7 +44,7 @@ export default function ResetPasswordPage() {
     <div className="min-h-screen bg-[#08081a] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white tracking-tight">Algoritma Soru Takibi</h1>
+          <h1 className="text-3xl font-bold text-white tracking-tight">{t('appTitle')}</h1>
         </div>
 
         <div className="bg-slate-900/70 border border-white/[0.08] rounded-2xl p-8 shadow-2xl backdrop-blur-sm">
@@ -59,36 +55,34 @@ export default function ResetPasswordPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="text-xl font-semibold text-white">Şifren güncellendi</h2>
-              <p className="text-indigo-300/60 text-sm">Ana sayfaya yönlendiriliyorsun...</p>
+              <h2 className="text-xl font-semibold text-white">{t('auth.resetPassword.successTitle')}</h2>
+              <p className="text-indigo-300/60 text-sm">{t('auth.resetPassword.successSubtitle')}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <h2 className="text-xl font-semibold text-white">Yeni şifre belirle</h2>
-              </div>
+              <h2 className="text-xl font-semibold text-white">{t('auth.resetPassword.title')}</h2>
 
               <div className="space-y-2">
-                <Label htmlFor="new-password" className="text-indigo-200/80 text-sm">Yeni şifre</Label>
+                <Label htmlFor="new-password" className="text-indigo-200/80 text-sm">{t('auth.resetPassword.newPasswordLabel')}</Label>
                 <Input
                   id="new-password"
                   type="password"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder="En az 6 karakter"
+                  placeholder={t('auth.minPasswordHint')}
                   required
                   className="bg-slate-800/80 border-white/10 text-white placeholder:text-white/30 focus:border-indigo-500 rounded-xl"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirm-password" className="text-indigo-200/80 text-sm">Şifre tekrar</Label>
+                <Label htmlFor="confirm-password" className="text-indigo-200/80 text-sm">{t('auth.confirmPasswordLabel')}</Label>
                 <Input
                   id="confirm-password"
                   type="password"
                   value={confirm}
                   onChange={e => setConfirm(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                   required
                   className="bg-slate-800/80 border-white/10 text-white placeholder:text-white/30 focus:border-indigo-500 rounded-xl"
                 />
@@ -101,7 +95,7 @@ export default function ResetPasswordPage() {
                 disabled={busy}
                 className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition-colors disabled:opacity-50"
               >
-                {busy ? 'Güncelleniyor...' : 'Şifremi Güncelle'}
+                {busy ? t('auth.resetPassword.updatingButton') : t('auth.resetPassword.updateButton')}
               </Button>
             </form>
           )}

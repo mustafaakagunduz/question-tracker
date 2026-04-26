@@ -68,7 +68,7 @@ export const Header = () => {
                                     className="text-red-400 hover:text-red-300 hover:bg-red-900/20 cursor-pointer flex items-center gap-2 mt-1"
                                 >
                                     <LogOut className="h-4 w-4" />
-                                    Çıkış Yap
+                                    {t('auth.signOut')}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>

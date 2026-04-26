@@ -134,5 +134,72 @@
   "language": {
     "en": "English",
     "tr": "Turkish"
+  },
+  "auth": {
+    "appSubtitle": "Track your questions, review regularly",
+    "loginTab": "Sign In",
+    "registerTab": "Sign Up",
+    "emailLabel": "Email",
+    "emailPlaceholder": "example@gmail.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "confirmPasswordLabel": "Confirm password",
+    "minPasswordHint": "At least 6 characters",
+    "forgotPassword": "Forgot password",
+    "loginButton": "Sign In",
+    "loginButtonLoading": "Signing in...",
+    "registerButton": "Sign Up",
+    "registerButtonLoading": "Signing up...",
+    "googleButton": "{action} with Google",
+    "googleLogin": "Sign in",
+    "googleRegister": "Sign up",
+    "orDivider": "or",
+    "signOut": "Sign Out",
+    "otp": {
+      "title": "Verify your email",
+      "description": "Enter the 6-digit code sent to {email}",
+      "verifyButton": "Verify",
+      "verifyingButton": "Verifying...",
+      "resendButton": "Resend code",
+      "resendCooldown": "Resend ({s}s)"
+    },
+    "forgotForm": {
+      "title": "Reset your password",
+      "subtitle": "We'll send a reset link to your email",
+      "sendButton": "Send reset link",
+      "sendingButton": "Sending...",
+      "backToLogin": "← Sign in"
+    },
+    "forgotSent": {
+      "title": "Email sent",
+      "description": "A password reset link has been sent to {email}. Check your inbox and spam folder.",
+      "backToLogin": "← Sign in"
+    },
+    "resetPassword": {
+      "title": "Set new password",
+      "newPasswordLabel": "New password",
+      "updateButton": "Update Password",
+      "updatingButton": "Updating...",
+      "successTitle": "Password updated",
+      "successSubtitle": "Redirecting to home..."
+    },
+    "callback": {
+      "loading": "Signing in..."
+    },
+    "errors": {
+      "invalidLogin": "Invalid email or password.",
+      "loginFailed": "Sign in failed.",
+      "alreadyRegistered": "This email is already registered. Try signing in.",
+      "registerFailed": "Registration failed.",
+      "passwordMismatch": "Passwords don't match.",
+      "passwordTooShort": "Password must be at least 6 characters.",
+      "otpIncomplete": "Please enter the complete 6-digit code.",
+      "otpExpired": "Code expired. Request a new one.",
+      "otpInvalid": "Invalid code.",
+      "resendFailed": "Failed to send code.",
+      "resetFailed": "Failed to send reset email.",
+      "updateFailed": "Failed to update password.",
+      "googleFailed": "Google sign in failed."
+    }
   }
 }
