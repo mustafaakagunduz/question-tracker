@@ -43,6 +43,7 @@ export const fetchQuestions = async (): Promise<Question[]> => {
 
 export const createQuestion = async (question: Omit<Question, 'id'>): Promise<Question> => {
   const supabase = getClient();
+  const { data: { user } } = await supabase.auth.getUser();
   const payload = {
     title: question.title,
     site: question.site,
@@ -50,6 +51,7 @@ export const createQuestion = async (question: Omit<Question, 'id'>): Promise<Qu
     solved_date: toDateOnly(question.solvedDate),
     difficulty: question.difficulty,
     review_date: toDateOnly(question.reviewDate),
+    user_id: user?.id,
   };
 
   const { data, error } = await supabase
@@ -122,6 +124,7 @@ export const setReviewStatusForDate = async (
   isReviewed: boolean
 ): Promise<void> => {
   const supabase = getClient();
+  const { data: { user } } = await supabase.auth.getUser();
   const { error } = await supabase
     .from('question_review_status')
     .upsert(
@@ -129,6 +132,7 @@ export const setReviewStatusForDate = async (
         question_id: questionId,
         review_date: reviewDate,
         is_reviewed: isReviewed,
+        user_id: user?.id,
       }),
       { onConflict: 'question_id,review_date' }
     );
