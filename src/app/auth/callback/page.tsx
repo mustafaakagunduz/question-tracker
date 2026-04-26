@@ -10,9 +10,18 @@ export default function AuthCallbackPage() {
 
   useEffect(() => {
     const supabase = getSupabaseClient();
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      router.replace(session ? '/' : '/login');
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        subscription.unsubscribe();
+        router.replace('/');
+      } else if (event === 'INITIAL_SESSION' && !session) {
+        subscription.unsubscribe();
+        router.replace('/login');
+      }
     });
+
+    return () => subscription.unsubscribe();
   }, [router]);
 
   return (
