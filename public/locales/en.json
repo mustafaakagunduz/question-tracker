@@ -34,7 +34,8 @@
     "questionTitle": "Question Title",
     "titlePlaceholder": "e.g.: Two Sum",
     "platform": "Platform",
-    "platformPlaceholder": "LeetCode, HackerRank, etc.",
+    "platformPlaceholder": "Leetcode, HackerRank, etc.",
+    "platformOther": "Other",
     "link": "Link",
     "linkPlaceholder": "https://...",
     "solvedDate": "Date Solved",
@@ -50,7 +51,8 @@
     "title": "Edit Algorithm Question",
     "questionTitle": "Question Title",
     "platform": "Platform",
-    "platformPlaceholder": "LeetCode, HackerRank, etc.",
+    "platformPlaceholder": "Leetcode, HackerRank, etc.",
+    "platformOther": "Other",
     "link": "Link",
     "linkPlaceholder": "https://...",
     "solvedDate": "Date Solved",
@@ -100,7 +102,7 @@
       "addingText": "You can add a new question by clicking the + button in the top right. You need to enter the following information for each question:",
       "addingItems": {
         "item1": "Question title",
-        "item2": "Platform (LeetCode, HackerRank, etc.)",
+        "item2": "Platform (Leetcode, HackerRank, etc.)",
         "item3": "Link",
         "item4": "Date solved",
         "item5": "Difficulty level"

@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Edit } from 'lucide-react';
+import { CalendarIcon, Edit, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Question } from '../types';
 
@@ -39,11 +39,13 @@ export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, questio
     const [difficultyLevel, setDifficultyLevel] = useState<number>(3); // Default: Orta
     const [datePickerOpen, setDatePickerOpen] = useState(false);
 
+    const KNOWN_PLATFORMS = ['Leetcode', 'HackerRank', 'Codeforces', 'CodeChef', 'AtCoder', 'HackerEarth', 'Diğer'];
+
     // Populate form with question data when opened
     useEffect(() => {
         if (question) {
             setTitle(question.title);
-            setSite(question.site);
+            setSite(KNOWN_PLATFORMS.includes(question.site) ? question.site : 'Leetcode');
             setLink(question.link);
             setSolvedDate(question.solvedDate || new Date());
 
@@ -140,13 +142,23 @@ export function EditQuestionDialog({ open, onOpenChange, onQuestionEdit, questio
 
                         <div className="grid gap-2">
                             <Label htmlFor="site" className="text-indigo-200 font-medium">{t('editQuestionDialog.platform')}</Label>
-                            <Input
-                                id="site"
-                                value={site}
-                                onChange={(e) => setSite(e.target.value)}
-                                className="bg-indigo-900/40 border-indigo-300/20 text-white focus:border-indigo-300/50 focus:ring-1 focus:ring-indigo-400/30 transition-all duration-200"
-                                placeholder={t('editQuestionDialog.platformPlaceholder')}
-                            />
+                            <div className="relative">
+                                <select
+                                    id="site"
+                                    value={site}
+                                    onChange={(e) => setSite(e.target.value)}
+                                    className="w-full appearance-none bg-indigo-900/40 border border-indigo-300/20 text-white rounded-md px-3 py-2 pr-8 focus:outline-none focus:border-indigo-300/50 focus:ring-1 focus:ring-indigo-400/30 transition-all duration-200 cursor-pointer"
+                                >
+                                    <option value="Leetcode" className="bg-slate-900">Leetcode</option>
+                                    <option value="HackerRank" className="bg-slate-900">HackerRank</option>
+                                    <option value="Codeforces" className="bg-slate-900">Codeforces</option>
+                                    <option value="CodeChef" className="bg-slate-900">CodeChef</option>
+                                    <option value="AtCoder" className="bg-slate-900">AtCoder</option>
+                                    <option value="HackerEarth" className="bg-slate-900">HackerEarth</option>
+                                    <option value="Diğer" className="bg-slate-900">{t('editQuestionDialog.platformOther')}</option>
+                                </select>
+                                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-indigo-300" />
+                            </div>
                         </div>
 
                         <div className="grid gap-2">

@@ -34,7 +34,8 @@
     "questionTitle": "Soru Başlığı",
     "titlePlaceholder": "Örn: İki Sayının Toplamı",
     "platform": "Platform",
-    "platformPlaceholder": "LeetCode, HackerRank, vb.",
+    "platformPlaceholder": "Leetcode, HackerRank, vb.",
+    "platformOther": "Diğer",
     "link": "Bağlantı Linki",
     "linkPlaceholder": "https://...",
     "solvedDate": "Çözdüğüm Tarih",
@@ -50,7 +51,8 @@
     "title": "Algoritma Sorusu Düzenle",
     "questionTitle": "Soru Başlığı",
     "platform": "Platform",
-    "platformPlaceholder": "LeetCode, HackerRank, vb.",
+    "platformPlaceholder": "Leetcode, HackerRank, vb.",
+    "platformOther": "Diğer",
     "link": "Bağlantı Linki",
     "linkPlaceholder": "https://...",
     "solvedDate": "Çözdüğüm Tarih",
@@ -100,7 +102,7 @@
       "addingText": "Sağ üstteki + butonuna tıklayarak yeni bir soru ekleyebilirsiniz. Her soru için aşağıdaki bilgileri girmelisiniz:",
       "addingItems": {
         "item1": "Soru başlığı",
-        "item2": "Platform (LeetCode, HackerRank vb.)",
+        "item2": "Platform (Leetcode, HackerRank vb.)",
         "item3": "Bağlantı linki",
         "item4": "Çözdüğünüz tarih",
         "item5": "Zorluk seviyesi"
