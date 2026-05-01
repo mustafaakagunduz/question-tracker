@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, ExternalLink, Edit, Trash2 } from 'lucide-react';
 import { format, compareAsc } from 'date-fns';
@@ -12,28 +11,6 @@ import DeleteConfirmDialog from './DeleteConfirmDialog';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Question } from '../types';
 import { createQuestion, fetchQuestions, removeQuestion, updateQuestion } from '../lib/questionsApi';
-
-const getDifficultyColor = (difficulty: string): string => {
-    switch (difficulty) {
-        case 'Çok Kolay':
-        case 'Very Easy':
-            return 'bg-green-500/15 text-green-300 hover:shadow-md hover:from-green-300 hover:to-green-200 font-medium border border-green-500/20';
-        case 'Kolay':
-        case 'Easy':
-            return 'bg-emerald-500/15 text-emerald-300 hover:shadow-md hover:from-emerald-300 hover:to-emerald-200 font-medium border border-emerald-500/20';
-        case 'Orta':
-        case 'Medium':
-            return 'bg-amber-500/15 text-amber-300 hover:shadow-md hover:from-amber-300 hover:to-amber-200 font-medium border border-amber-500/20';
-        case 'Zor':
-        case 'Hard':
-            return 'bg-orange-500/15 text-orange-300 hover:shadow-md hover:from-orange-300 hover:to-orange-200 font-medium border border-orange-500/20';
-        case 'Çok Zor':
-        case 'Very Hard':
-            return 'bg-red-500/15 text-red-300 hover:shadow-md hover:from-red-300 hover:to-red-200 font-medium border border-red-500/20';
-        default:
-            return 'bg-slate-500/15 text-slate-300 hover:shadow-md hover:from-gray-300 hover:to-gray-200 font-medium border border-slate-500/20';
-    }
-};
 
 const sortQuestionsBySolvedDate = (questions: Question[]): Question[] => {
     return [...questions].sort((a, b) => {
@@ -52,7 +29,7 @@ export const QuestionTable: React.FC = () => {
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
-    const [reviewDateSortAsc, setReviewDateSortAsc] = useState(false);
+    const [reviewDateSortAsc, setReviewDateSortAsc] = useState(true);
     const locale = language === 'tr' ? tr : enUS;
 
     useEffect(() => {
@@ -184,7 +161,6 @@ export const QuestionTable: React.FC = () => {
                                 <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.site')}</TableHead>
                                 <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.link')}</TableHead>
                                 <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.solvedDate')}</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.difficulty')}</TableHead>
                                 <TableHead
                                     className="text-white font-semibold tracking-wide cursor-pointer select-none"
                                     onClick={() => setReviewDateSortAsc((prev) => !prev)}
@@ -197,13 +173,13 @@ export const QuestionTable: React.FC = () => {
                         <TableBody>
                             {loading ? (
                                 <TableRow className="hover:bg-transparent">
-                                    <TableCell colSpan={7} className="text-center py-12 text-indigo-200/70">
+                                    <TableCell colSpan={6} className="text-center py-12 text-indigo-200/70">
                                         Loading...
                                     </TableCell>
                                 </TableRow>
                             ) : questions.length === 0 ? (
                                 <TableRow className="hover:bg-transparent">
-                                    <TableCell colSpan={7} className="text-center py-12 text-indigo-200/70">
+                                    <TableCell colSpan={6} className="text-center py-12 text-indigo-200/70">
                                         <div className="flex flex-col items-center gap-3">
                                             <PlusCircle className="h-10 w-10 opacity-50" />
                                             <span className="text-lg">{t('questionTable.emptyTableMessage')}</span>
@@ -211,10 +187,15 @@ export const QuestionTable: React.FC = () => {
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                displayedQuestions.map((question) => (
+                                displayedQuestions.map((question, index) => {
+                                    const nextQuestion = displayedQuestions[index + 1];
+                                    const isGroupEnd = !nextQuestion || (
+                                        question.reviewDate?.toDateString() !== nextQuestion.reviewDate?.toDateString()
+                                    );
+                                    return (
                                     <TableRow
                                         key={question.id}
-                                        className="border-b border-white/[0.06]"
+                                        className={`border-b ${isGroupEnd ? 'border-yellow-400/60' : 'border-white/[0.06]'}`}
                                     >
                                         <TableCell className="font-medium text-white">{question.title}</TableCell>
                                         <TableCell className="text-indigo-100">{question.site}</TableCell>
@@ -230,14 +211,6 @@ export const QuestionTable: React.FC = () => {
                                             </a>
                                         </TableCell>
                                         <TableCell className="text-indigo-100">{formatDate(question.solvedDate)}</TableCell>
-                                        <TableCell>
-                                            <Badge
-                                                className={`${getDifficultyColor(question.difficulty)} px-3 py-1 shadow-sm rounded-full`}
-                                                style={{ transform: 'none', transition: 'background-color 0.2s, box-shadow 0.2s' }}
-                                            >
-                                                {question.difficulty}
-                                            </Badge>
-                                        </TableCell>
                                         <TableCell className="text-indigo-100">{formatDate(question.reviewDate)}</TableCell>
                                         <TableCell className="text-right">
                                             <div className="flex justify-end gap-2">
@@ -258,7 +231,8 @@ export const QuestionTable: React.FC = () => {
                                             </div>
                                         </TableCell>
                                     </TableRow>
-                                ))
+                                    );
+                                })
                             )}
                         </TableBody>
                     </Table>
