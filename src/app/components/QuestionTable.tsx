@@ -113,6 +113,14 @@ export const QuestionTable: React.FC = () => {
           })
         : questions;
 
+    const groupInfo = displayedQuestions.map((question, index) => {
+        const key = question.reviewDate?.toDateString() ?? 'null';
+        const prevKey = index > 0 ? (displayedQuestions[index - 1].reviewDate?.toDateString() ?? 'null') : null;
+        if (key === prevKey) return { isFirst: false, count: 0 };
+        const count = displayedQuestions.filter(q => (q.reviewDate?.toDateString() ?? 'null') === key).length;
+        return { isFirst: true, count };
+    });
+
     return (
         <>
             <AddQuestionDialog
@@ -157,15 +165,23 @@ export const QuestionTable: React.FC = () => {
                     <Table>
                         <TableHeader className="bg-indigo-950/60">
                             <TableRow className="border-b-0 hover:bg-transparent">
-                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.question')}</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.site')}</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.link')}</TableHead>
-                                <TableHead className="text-white font-semibold tracking-wide">{t('questionTable.columns.solvedDate')}</TableHead>
-                                <TableHead
-                                    className="text-white font-semibold tracking-wide cursor-pointer select-none"
-                                    onClick={() => setReviewDateSortAsc((prev) => !prev)}
-                                >
+                                <TableHead className="text-white font-semibold tracking-wide cursor-default">{t('questionTable.columns.question')}</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide cursor-default">{t('questionTable.columns.site')}</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide cursor-default">{t('questionTable.columns.link')}</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide cursor-default">{t('questionTable.columns.solvedDate')}</TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide cursor-default">
                                     {t('questionTable.columns.reviewDate')}
+                                </TableHead>
+                                <TableHead className="text-white font-semibold tracking-wide text-center w-12 border-x border-white/[0.06]">
+                                    <div className="relative group/tooltip flex justify-center cursor-default">
+                                        <span>{language === 'tr' ? 'SS' : 'NoQ'}</span>
+                                        <div className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-0 z-[9999]">
+                                            <div className="bg-slate-800 border border-white/10 text-white text-xs font-medium px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap">
+                                                {language === 'tr' ? 'Soru Sayısı' : 'Number of Questions'}
+                                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-slate-800" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </TableHead>
                                 <TableHead className="text-white font-semibold tracking-wide text-right">{t('questionTable.columns.actions')}</TableHead>
                             </TableRow>
@@ -173,13 +189,13 @@ export const QuestionTable: React.FC = () => {
                         <TableBody>
                             {loading ? (
                                 <TableRow className="hover:bg-transparent">
-                                    <TableCell colSpan={6} className="text-center py-12 text-indigo-200/70">
+                                    <TableCell colSpan={7} className="text-center py-12 text-indigo-200/70">
                                         Loading...
                                     </TableCell>
                                 </TableRow>
                             ) : questions.length === 0 ? (
                                 <TableRow className="hover:bg-transparent">
-                                    <TableCell colSpan={6} className="text-center py-12 text-indigo-200/70">
+                                    <TableCell colSpan={7} className="text-center py-12 text-indigo-200/70">
                                         <div className="flex flex-col items-center gap-3">
                                             <PlusCircle className="h-10 w-10 opacity-50" />
                                             <span className="text-lg">{t('questionTable.emptyTableMessage')}</span>
@@ -192,6 +208,7 @@ export const QuestionTable: React.FC = () => {
                                     const isGroupEnd = !nextQuestion || (
                                         question.reviewDate?.toDateString() !== nextQuestion.reviewDate?.toDateString()
                                     );
+                                    const { isFirst, count } = groupInfo[index];
                                     return (
                                     <TableRow
                                         key={question.id}
@@ -212,6 +229,22 @@ export const QuestionTable: React.FC = () => {
                                         </TableCell>
                                         <TableCell className="text-indigo-100">{formatDate(question.solvedDate)}</TableCell>
                                         <TableCell className="text-indigo-100">{formatDate(question.reviewDate)}</TableCell>
+                                        {isFirst && (
+                                            <TableCell
+                                                rowSpan={count}
+                                                className="text-center align-middle text-white font-bold text-lg border-x border-white/[0.06]"
+                                            >
+                                                <div className="relative group/tooltip flex justify-center cursor-default">
+                                                    <span>{count}</span>
+                                                    <div className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-0 z-[9999]">
+                                                        <div className="bg-slate-800 border border-white/10 text-white text-xs font-medium px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap">
+                                                            {language === 'tr' ? 'Soru Sayısı' : 'Number of Questions'}
+                                                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-slate-800" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </TableCell>
+                                        )}
                                         <TableCell className="text-right">
                                             <div className="flex justify-end gap-2">
                                                 <Button
